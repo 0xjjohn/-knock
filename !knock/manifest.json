@@ -1,13 +1,13 @@
 {
-  "name": "!knock",
-  "short_name": "!knock",
+  "name": "screennote",
+  "short_name": "screennote",
   "description": "Your film and series diary: rate, review and keep a watchlist.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "lang": "en",
   "dir": "ltr",
   "icons": [

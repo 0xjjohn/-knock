@@ -1,6 +1,6 @@
-// !knock — Service Worker
+// screennote — Service Worker
 // زوّد رقم VERSION مع كل تعديل عشان الموبايل ينزّل النسخة الجديدة
-const VERSION = 'knock-v29';
+const VERSION = 'screennote-v31';
 const SHELL = ['./', './index.html', './manifest.json', './firebase-config.js', './icon/icon-192.png', './icon/icon-512.png', './icon/apple-touch-icon.png'];
 const RUNTIME = VERSION + '-rt';
 const MAX_RUNTIME = 400;

@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="!knock">
-<title>!knock</title>
+<meta name="apple-mobile-web-app-title" content="screennote">
+<title>screennote</title>
 <link rel="manifest" href="manifest.json">
 <script>window.KNOCK_FIREBASE={apiKey:"AIzaSyA3v6hp1hkWX54rGBASyru0qissHeK_ZMk",authDomain:"logbox-9ab92.firebaseapp.com",projectId:"logbox-9ab92",storageBucket:"logbox-9ab92.firebasestorage.app",messagingSenderId:"1007403032856",appId:"1:1007403032856:web:bcc6f0e1131b1fc6663e6d"};</script>
 <script src="firebase-config.js?v=23"></script>
@@ -380,7 +380,7 @@ a.opt{color:inherit}
 #auth .lg{position:absolute;top:calc(var(--top) + 12px);inset-inline-end:14px;z-index:6;height:34px;min-width:52px;padding:0 14px;border:1.5px solid rgba(255,255,255,.75);border-radius:99px;background:rgba(0,0,0,.45);color:#fff;font-size:13.5px;font-weight:700;font-family:inherit}
 #auth .au-d{position:absolute;left:0;right:0;bottom:calc(var(--safe) + 22px);display:flex;justify-content:center;gap:22px;direction:ltr;z-index:6}
 #auth .au-d i{width:9px;height:9px;border-radius:50%;background:#b6c0ca;opacity:.9}
-#auth .au-d i.on{background:var(--g);opacity:1}
+#auth .au-d i.on{background:#fff;opacity:1}
 #auth .ppx{background-size:cover;background-position:center;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.1);background-color:#222c35}
 #auth .g0{background-image:linear-gradient(160deg,#8a3b12,#2a0e05)}
 #auth .g1{background-image:linear-gradient(160deg,#1f4f6b,#0a1c2a)}
@@ -392,18 +392,18 @@ a.opt{color:inherit}
 #auth .shx{position:absolute;left:0;right:0;top:48.3%;bottom:0;border-radius:30px 30px 0 0;background:#445566;z-index:1}
 #auth .shx .shh{width:34px;height:4px;border-radius:3px;background:#1d2630;margin:13px auto 0}
 #auth .shx .tt{padding:27px 18px 0;font-size:17px;line-height:22px;font-weight:500;text-align:start}
-#auth .shx .yr{padding:0 18px 9px;font-size:17px;line-height:22px;color:#9fb0bf;text-align:start}
+#auth .shx .yr{padding:0 18px 9px;font-size:17px;line-height:22px;color:#9a9a9a;text-align:start}
 #auth .ac{display:flex;height:95px;border-top:1px solid #3a4958;border-bottom:1px solid #3a4958}
-#auth .ac div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#a7b6c4;font-size:14.5px}
+#auth .ac div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#a0a0a0;font-size:14.5px}
 #auth .ac svg{height:34px;width:auto}
 #auth .rs{display:flex;justify-content:center;gap:1px;padding-top:16px}
 #auth .rs svg{width:38px;height:36px;fill:#364654}
-#auth .rtx{text-align:center;color:#6f8192;font-size:12px;margin-top:11px;padding-bottom:13px;border-bottom:1px solid #3a4958}
-#auth .rr{display:flex;align-items:center;gap:18px;padding:0 20px;height:43px;color:#9fb0bf;font-size:16.5px}
+#auth .rtx{text-align:center;color:#7a7a7a;font-size:12px;margin-top:11px;padding-bottom:13px;border-bottom:1px solid #3a4958}
+#auth .rr{display:flex;align-items:center;gap:18px;padding:0 20px;height:43px;color:#9a9a9a;font-size:16.5px}
 #auth .rr:first-of-type{margin-top:9px}
 #auth .rr svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
 #auth .cn{position:absolute;left:0;right:0;top:22.6%;bottom:0}
-#auth .mb{height:26px;display:flex;align-items:center;padding:0 15px;background:#2c3844;color:#9fb0bf;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase}
+#auth .mb{height:26px;display:flex;align-items:center;padding:0 15px;background:#2c3844;color:#9a9a9a;font-size:11.5px;letter-spacing:2.2px;text-transform:uppercase}
 #auth[dir=rtl] .mb{letter-spacing:0;font-size:12.5px}
 #auth .drx{display:flex;align-items:stretch;height:57px;gap:9px;padding-inline-start:15px}
 #auth .drx .db{align-self:center;width:40px;height:40px;border:1.2px solid #4e5d6b;border-radius:5px;display:grid;place-items:center;font-size:23px;font-weight:300;color:#d6dee5;flex:none}
@@ -411,8 +411,8 @@ a.opt{color:inherit}
 #auth .drx .tx{flex:1;min-width:0;border-bottom:1px solid #2d3945;display:flex;flex-direction:column;justify-content:center;gap:3px;padding-inline-start:4px}
 #auth .drx:last-child .tx{border-bottom:0}
 #auth .drx .t1{font-size:15px;font-weight:700;color:#e8eef3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:start}
-#auth .drx .t1 span{font-weight:400;font-size:12.5px;color:#9fb0bf;margin-inline-start:4px}
-#auth .stx{font-size:11.5px;letter-spacing:1px;color:#00e054;direction:ltr;text-align:start;display:flex;align-items:center;gap:5px;line-height:1}
+#auth .drx .t1 span{font-weight:400;font-size:12.5px;color:#9a9a9a;margin-inline-start:4px}
+#auth .stx{font-size:11.5px;letter-spacing:1px;color:#fff;direction:ltr;text-align:start;display:flex;align-items:center;gap:5px;line-height:1}
 #auth .stx svg{width:12px;height:11px;fill:#ff8000}
 #auth .s3{--bh:min(202px,26vh)}
 #auth .s3 .bdx{height:var(--bh);background-size:cover;background-position:center top;background-color:#1b232b;background-image:linear-gradient(135deg,#3a2a1d,#0d1a22);position:relative}
@@ -420,7 +420,7 @@ a.opt{color:inherit}
 #auth .s3 .ppx{position:absolute;top:calc(var(--bh) - 4px);inset-inline-end:15px;width:91px;height:136px;z-index:2;border-radius:3px}
 #auth .s3 .in{padding:26px 15px 0;text-align:start}
 #auth .s3 h3{margin:0;font-size:18px;font-weight:700;line-height:1.2}
-#auth .s3 h3 span{font-size:14px;font-weight:400;color:#9fb0bf;margin-inline-start:4px}
+#auth .s3 h3 span{font-size:14px;font-weight:400;color:#9a9a9a;margin-inline-start:4px}
 #auth .s3 .stz{margin-top:14px}
 #auth .s3 .wd{margin-top:14px;font-size:13px;color:#7d8e9d}
 #auth .s3 .rvx{margin:38px 15px 0;font-family:"Times New Roman",Times,"Liberation Serif",serif;font-size:16px;line-height:1.5;color:#b9c5cf;text-align:start}
@@ -434,19 +434,19 @@ a.opt{color:inherit}
 #auth .heroz .b3{background-image:linear-gradient(150deg,#245c40,#08201a)}
 #auth .heroz .b4{background-image:linear-gradient(150deg,#665018,#1f180a)}
 #auth .heroz::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,0) 24%,rgba(0,0,0,0) 40%,#000 98%)}
-#auth .heroz .wl{position:absolute;left:26px;right:26px;bottom:4px;z-index:2;font-size:34px;line-height:1.1;font-weight:700;letter-spacing:-.9px;text-align:start}
+#auth .heroz .wl{position:absolute;left:26px;right:26px;bottom:4px;z-index:2;font-family:"Times New Roman",Times,"Liberation Serif",serif;font-size:32px;line-height:1.15;font-weight:400;font-style:italic;letter-spacing:0;text-align:start}
 #auth[dir=rtl] .heroz .wl{letter-spacing:0}
-#auth .heroz .wl small{display:block;margin-top:9px;font-size:16px;font-weight:400;color:#b3c0cc;letter-spacing:0;line-height:1.45}
+#auth .heroz .wl small{display:block;margin-top:10px;font-family:'Inter',system-ui,sans-serif;font-style:normal;font-size:12px;font-weight:500;color:#9a9a9a;letter-spacing:1.5px;text-transform:uppercase;line-height:1.4}
 #auth .fb{padding:14px 24px calc(54px + var(--safe))}
 #auth .pbn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;height:52px;border-radius:2px;background:#000;border:1px solid #3a3a3a;color:#fff;font-size:16.5px;font-weight:600;margin:0 0 10px;font-family:inherit}
 #auth .pbn.wh{background:#fff;border-color:#fff;color:#000}
-#auth .pbn.gr{background:#00e054;border-color:#00e054;color:#04130a}
+#auth .pbn.gr{background:#fff;border-color:#fff;color:#000}
 #auth .pbn[disabled]{opacity:.55}
 #auth .pbn svg{width:20px;height:20px}
 #auth .gl{display:block;margin:6px auto 0;padding:8px 16px;color:#9a9a9a;font-size:14.5px;font-weight:500;font-family:inherit}
 #auth .au-e{color:#f87171;font-size:13.5px;line-height:1.4;margin:0 4px 8px;text-align:start}
 #auth .au-e:empty{display:none}
-#auth .au-e.ok{color:var(--g)}
+#auth .au-e.ok{color:#fff}
 #auth .au-f2{flex:1 0 auto;overflow-y:auto;display:flex;flex-direction:column;padding:calc(14px + var(--top)) 24px calc(22px + var(--safe));background:#000;animation:auup .4s both}
 #auth .au-bar{display:flex;justify-content:space-between;align-items:center;min-height:44px}
 #auth .au-bar .lg{position:static}
@@ -455,14 +455,14 @@ a.opt{color:inherit}
 #auth[dir=rtl] .bk svg{transform:scaleX(-1)}
 #auth .f-t{font-size:30px;font-weight:700;letter-spacing:-.8px;line-height:1.15;margin:34px 0 8px;text-align:start}
 #auth[dir=rtl] .f-t{letter-spacing:0}
-#auth .f-s{font-size:15.5px;line-height:1.55;color:#a7b6c4;margin:0 0 24px;text-align:start}
+#auth .f-s{font-size:15.5px;line-height:1.55;color:#a0a0a0;margin:0 0 24px;text-align:start}
 #auth input{display:block;width:100%;height:54px;background:#000;border:1px solid #3a3a3a;border-radius:2px;padding:0 22px;font-size:16px;margin:0 0 12px;color:#fff;font-family:inherit}
-#auth input:focus{border-color:var(--g);outline:0}
-#auth input::placeholder{color:#6f8192}
-#auth .au-or{display:flex;align-items:center;gap:12px;color:#6f8192;font-size:13px;margin:10px 0}
-#auth .au-or::before,#auth .au-or::after{content:'';flex:1;height:1px;background:#26313b}
-#auth .au-fg{display:block;margin:14px auto 0;color:#9fb0bf;font-size:14.5px;padding:4px}
-#auth .au-l{color:#9fb0bf;font-size:15px;text-align:center;margin-top:auto;padding-top:22px}
+#auth input:focus{border-color:#fff;outline:0}
+#auth input::placeholder{color:#7a7a7a}
+#auth .au-or{display:flex;align-items:center;gap:12px;color:#7a7a7a;font-size:13px;margin:10px 0}
+#auth .au-or::before,#auth .au-or::after{content:'';flex:1;height:1px;background:#262626}
+#auth .au-fg{display:block;margin:14px auto 0;color:#9a9a9a;font-size:14.5px;padding:4px}
+#auth .au-l{color:#9a9a9a;font-size:15px;text-align:center;margin-top:auto;padding-top:22px}
 #auth .au-l button{color:#fff;font-weight:700;padding:4px 3px}
 @keyframes aulogo{from{opacity:0;transform:translateY(-14px) scale(.7)}to{opacity:1;transform:none}}
 @keyframes auup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -529,6 +529,14 @@ a.opt{color:inherit}
 #toast.on{opacity:1;transform:translate(-50%,0)}
 @media(min-width:700px){.grid{gap:12px}}
 
+/* v30 popover */
+#pop .pp-bd{position:fixed;inset:0;z-index:2000}
+#pop .pp-m{position:fixed;z-index:2001;min-width:146px;background:#1c1c1e;border:1px solid #2c2c2e;border-radius:12px;padding:4px;box-shadow:0 10px 30px rgba(0,0,0,.55);transform-origin:top right;animation:ppin .14s ease-out}
+#pop .pp-m button{display:flex;align-items:center;gap:10px;width:100%;height:34px;padding:0 10px;border-radius:8px;font-size:12.5px;font-weight:500;color:#ececec;text-align:left}
+#pop .pp-m button:active{background:#2a2a2c}
+#pop .pp-m button svg{width:15px;height:15px;flex:none}
+#pop .pp-m button.red{color:#ff453a}
+@keyframes ppin{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
 /* v29 */
 .en-r{font-size:11px;line-height:1.55}
 .rv p{font-size:11px}
@@ -548,9 +556,9 @@ a.opt{color:inherit}
 .cc small{display:block;font-size:11px;color:var(--mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .crw{padding:2px 16px calc(28px + var(--safe))}
 .crj{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid #1a1a1a}
-.crj>span{flex:none;width:98px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);padding-top:7px;font-weight:600}
-.crj>div{flex:1;display:flex;flex-wrap:wrap;gap:6px}
-.crj a{background:#1c1c1e;border-radius:8px;padding:5px 10px;font-size:12.5px;font-weight:500}
+.crj>span{flex:none;width:98px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);padding-top:9px;font-weight:600}
+.crj>div{flex:1;display:flex;flex-wrap:wrap;gap:0 16px}
+.crj a{padding:5px 0;font-size:13px;font-weight:500;color:#eaeaea}
 .pvx{padding:4px 16px calc(28px + var(--safe))}
 .pvx .prov{padding:6px 0 14px}
 .pvx .lab2{padding-left:0;padding-right:0}
@@ -647,6 +655,7 @@ const I={
 const def=()=>({logs:[],watchlist:[],likes:[],likeItems:{},lists:[],art:{},favs:[null,null,null,null],profile:{name:'',bio:''},lang:'en-US',country:'EG'});
 function load(){try{const x=JSON.parse(localStorage.getItem(LS));if(x&&typeof x==='object')return Object.assign(def(),x);}catch(e){}return def();}
 let D=load();
+if(D.lang!=='en-US'){D.lang='en-US';try{localStorage.setItem(LS,JSON.stringify(D));}catch(_){}}
 (function(){const m=new Map();let ch=false;
   D.logs=D.logs.filter(l=>{const k=l.item.key+'|'+l.date,p=m.get(k);if(!p){m.set(k,l);return true;}ch=true;
     if(!p.review&&l.review)p.review=l.review;if(!p.rating&&l.rating)p.rating=l.rating;return false;});
@@ -1079,6 +1088,17 @@ function openCountry(){
   $('#cq',w).addEventListener('input',draw);
   box.addEventListener('click',e=>{const r=e.target.closest('[data-cc]');if(!r)return;D.country=r.dataset.cc;save();draw();toast(regionName(D.country));});
 }
+function closePop(){const m=$('#pop');if(m)m.remove();}
+function openPop(anchor,items,pick){
+  closePop();
+  const r=anchor.getBoundingClientRect();
+  const m=document.createElement('div');m.id='pop';
+  m.innerHTML=`<div class="pp-bd"></div><div class="pp-m" style="top:${Math.round(r.bottom+6)}px;right:${Math.max(8,Math.round(innerWidth-r.right))}px">${items.map(x=>`<button data-k="${x.k}"${x.red?' class="red"':''}>${x.ic||''}<span>${x.t}</span></button>`).join('')}</div>`;
+  document.body.appendChild(m);
+  $('.pp-bd',m).addEventListener('pointerdown',e=>{e.preventDefault();closePop();});
+  m.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;closePop();pick(b.dataset.k);});
+}
+window.addEventListener('hashchange',closePop);
 function fullPage(title,html){
   const w=openSheet(`<div class="lgp-h fp-h"><button class="ibtn" data-fpb aria-label="Back">${I.arrow}</button><h3>${esc(title)}</h3></div><div class="lgp-b sb">${html}</div>`,'fullpg');
   $('[data-fpb]',w).onclick=closeTop;
@@ -1239,8 +1259,7 @@ async function renderTitle(el,kind,id){
   };
   const ORDER=[['cast',I.users],['crew',I.clap],['details',I.info],['genre',I.tag],['release',I.cal],['similar',I.layers],['platform',I.tv]];
   function openMenu(){
-    const w=openSheet(`<div class="pk-list">${ORDER.map(([k,ic])=>`<button class="pk" data-o="${k}">${ic}<span>${O[k].t}</span></button>`).join('')}</div>`,'pocket');
-    w.addEventListener('click',e=>{const r=e.target.closest('[data-o]');if(r){const f=O[r.dataset.o].open;closeTop();setTimeout(f,130);}});
+    openPop($('[data-act="menu"]',el),ORDER.map(([k,ic])=>({k,ic,t:O[k].t})),k=>O[k].open());
   }
 
   /* ---- poster / backdrop override ---- */
@@ -1448,21 +1467,14 @@ $('#tab-profile').addEventListener('click',e=>{
   else if(b.dataset.unfav!==undefined){D.favs[+b.dataset.unfav]=null;save();renderProfile();}
   else if(b.dataset.p==='edit')editProfile();
   else if(b.dataset.p==='more'){
-    const w=openSheet(`<div class="pk-list"><button class="pk" data-o="set">${I.gear}<span>App settings</span></button></div>`,'pocket');
-    w.addEventListener('click',e=>{if(e.target.closest('[data-o]')){closeTop();setTimeout(openSettings,130);}});
+    const signed=Cloud.on&&(Cloud.user||getCached());
+    openPop(b,[{k:'sync',t:'Sync data',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-15.5 6.2L3 16M3 12a9 9 0 0115.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/></svg>'},signed?{k:'out',t:'Sign out',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',red:1}:{k:'in',t:'Sign in',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>'}],k=>{
+      if(k==='sync'){if(Cloud.on&&!signed){setGuest(false);showAuth(true);}else syncNow();}
+      else if(k==='out')signOutNow();
+      else{setGuest(false);showAuth(true);}
+    });
   }
-  else openSettings();
 });
-
-(()=>{
-  const el=$('#tab-profile');let sx=0,sy=0,on=false;
-  el.addEventListener('touchstart',e=>{on=e.touches.length===1;if(on){sx=e.touches[0].clientX;sy=e.touches[0].clientY;}},{passive:true});
-  el.addEventListener('touchend',e=>{
-    const t=e.changedTouches[0];if(!on||!t||sheets.length)return;on=false;
-    const dx=t.clientX-sx,dy=t.clientY-sy;
-    if(Math.abs(dx)>60&&Math.abs(dy)<Math.abs(dx)*.5)openSettings();
-  },{passive:true});
-})();
 
 /* profile sub pages */
 const ME_T={films:'Films',reviews:'Reviews',watchlist:'Watchlist',lists:'Lists',likes:'Likes'};
@@ -1549,30 +1561,6 @@ function editProfile(){
 }
 let deferredInstall=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;});
-function openSettings(){
-  const signed=Cloud.on&&(Cloud.user||getCached());
-  const w=openSheet(`<div class="lgp-h fp-h"><button class="ibtn" data-fpb aria-label="Back">${I.arrow}</button><h3>Settings</h3></div>
-    <div class="lgp-b st-b">
-      ${Cloud.on?`<div><div class="ios-g"><button class="ios-r" data-s="sync"><span>Sync</span><small id="st-sync">${esc(statusText())}</small></button></div></div>`:''}
-      <div><div class="ios-g"><div class="ios-r"><span>Language</span><div class="seg"><button data-l="en-US" class="${D.lang==='ar'?'':'on'}">English</button><button data-l="ar" class="${D.lang==='ar'?'on':''}">العربية</button></div></div></div><div class="ios-cap">Language of titles and synopses</div></div>
-      ${Cloud.on?`<div><div class="ios-g">${signed?'<button class="ios-r red" data-s="signout">Sign out</button>':'<button class="ios-r" data-s="signin"><span>Sign in or create account</span></button>'}</div></div>`:''}
-      <div class="ver">!knock · v29</div></div>`,'fullpg');
-  $('[data-fpb]',w).onclick=closeTop;
-  w.addEventListener('click',async e=>{
-    const l=e.target.closest('[data-l]');
-    if(l){
-      D.lang=l.dataset.l;save();memo.clear();SS.disc=null;
-      $$('.seg button',w).forEach(o=>o.classList.toggle('on',o===l));
-      initHome();doSearch(true);toast('Language changed');return;
-    }
-    const x=e.target.closest('[data-s]');if(!x)return;
-    const a=x.dataset.s;
-    if(a==='sync'){const sm=$('#st-sync',w);if(sm)sm.textContent='Syncing…';await syncNow();if(sm)sm.textContent=statusText();return;}
-    if(a==='signout'){signOutNow();return;}
-    if(a==='signin'){setGuest(false);closeAll();showAuth(true);return;}
-  });
-}
-
 /* ================= Cloud: accounts + sync (Firebase) ================= */
 const FB_BASE='https://www.gstatic.com/firebasejs/10.12.2/';
 const Cloud={on:false,fb:null,auth:null,db:null,ref:null,user:null,ready:false,timer:null,unsub:null,applying:false,dirty:false,st:'off',last:0,err:''};
@@ -1702,7 +1690,7 @@ en:{lang:'عربي',up:'Create account',in:'Sign in',skip:'Skip this step',googl
  h:['Track the films you’ve watched, and those you want to watch','Log and rate each film as you watch it, to build up a diary of your viewing history','Add a review to each entry, and edit it any time'],
  wat:'Watched',lik:'Liked',wl:'Watchlist',rate:'Rate',rev:'Review or log',lists:'Add to lists',watched:'Watched',
  rv:'A slow burn that lives in the details. The score hums under every scene, the colours feel chosen rather than found, and the last act lands quietly and stays with you long after the credits. Some films you watch; this one you carry around for a week.',
- wel:'Welcome',wsub:'Every film you watch, remembered.',
+ wel:'“Here’s looking at you, kid.”',wsub:'Casablanca · 1942',
  m:{enter:'Enter your email and password.',mism:'Passwords don’t match.',conn:'Can’t connect. Check your internet and try again.',gc:'The Google window closed before finishing. Try again, or use email.',gf:'Google sign-in didn’t work here. Try email instead.',first:'Type your email above first.',sent:'Reset link sent. Check your email.',gen:'Something went wrong. Try again.'},
  e:{cred:'Wrong email or password.',nouser:'No account with this email.',inuse:'This email already has an account. Sign in instead.',weak:'Password must be at least 6 characters.',mail:'That email doesn’t look right.',net:'No connection. Check your internet.',many:'Too many attempts. Try again in a few minutes.',nopw:'Enter your password.',pop:'The sign-in window was blocked. Allow pop-ups and try again.',dom:'This website isn’t authorized in Firebase yet.',diff:'This email already has a password account. Sign in with email.',env:'Google sign-in isn’t supported here. Use email instead.',off:'Email sign-in isn’t enabled for this app yet.'}},
 ar:{lang:'EN',up:'إنشاء حساب',in:'تسجيل الدخول',skip:'تخطَّ هذه الخطوة',google:'المتابعة بحساب جوجل',email:'البريد الإلكتروني',pass:'كلمة المرور',pass2:'تأكيد كلمة المرور',or:'أو',forgot:'نسيت كلمة المرور؟',have:'عندك حساب بالفعل؟',newh:'جديد هنا؟',mk:'أنشئ حساب',
