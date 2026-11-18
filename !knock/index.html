@@ -1019,6 +1019,20 @@ function setPoster(key,poster){
   Object.values(D.likeItems||{}).forEach(fix);
   (D.lists||[]).forEach(l=>l.items.forEach(fix));
   save();
+  syncArtDOM(key,poster);
+}
+function syncArtDOM(key,poster){
+  const i=key.indexOf('-'),type=key.slice(0,i),id=key.slice(i+1);
+  if(poster){
+    document.querySelectorAll(`a[href="#/${type}/${id}"] img,[data-key="${key}"] img`).forEach(im=>{
+      if(im.closest('.hero,.phero'))return;
+      const m=/\/t\/p\/(w\d+)\//.exec(im.getAttribute('src')||'');
+      if(m)im.src=IMG+m[1]+poster;
+    });
+  }
+  const keep=(sel,fn)=>{const e=$(sel);if(!e)return;const y=e.scrollTop;fn();e.scrollTop=y;};
+  keep('#tab-diary',renderDiary);keep('#tab-profile',renderProfile);
+  stack.forEach(s=>s.el._rerender&&s.el._rerender());
 }
 function viewPoster(path,title){
   if(!path){toast('No poster available');return;}
@@ -1311,7 +1325,7 @@ async function renderTitle(el,kind,id){
         const cur=logsOf(k);
         if(!cur.length){
           if(!n)return;
-          D.logs.push(newLog(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);toast('Added to diary ✓');
+          D.logs.push(newLog(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);
         }else cur[0].rating=n;
         save();refreshAll();draw();
       },42));
@@ -1321,7 +1335,7 @@ async function renderTitle(el,kind,id){
       const b=e.target.closest('[data-a]');if(!b)return;
       const a=b.dataset.a,k=it.key;
       if(a==='watch'){
-        if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);toast('Added to diary ✓');}
+        if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
         else{if(!confirm('Remove from watched? All your entries for it will be deleted.'))return;D.logs=D.logs.filter(l=>l.item.key!==k);}
         save();refreshAll();draw();
       }
@@ -1342,7 +1356,7 @@ async function renderTitle(el,kind,id){
     else if(a==='poster')openActions();
     else if(a==='ov'){const p=$('.ov',el);const c=p.classList.toggle('cl4');b.classList.toggle('open',!c);}
     else if(a==='eye'){
-      if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);toast('Added to diary ✓');}
+      if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
       else{if(!confirm('Remove from watched? All your entries for it will be deleted.'))return;D.logs=D.logs.filter(l=>l.item.key!==k);}
       save();refreshAll();
     }
@@ -1605,7 +1619,7 @@ function cloudListen(){
   Cloud.unsub=Cloud.fb.FS.onSnapshot(Cloud.ref,snap=>{
     if(!snap.exists()||(snap.metadata&&snap.metadata.hasPendingWrites))return;
     const r=parseRemote(snap.data());
-    if(r&&(r.rev||0)>(D.rev||0)){applyRemote(r);toast('Synced');}
+    if(r&&(r.rev||0)>(D.rev||0))applyRemote(r);
   },e=>{Cloud.st='error';Cloud.err=e.code||e.message||'';});
 }
 async function onSignedIn(u){
@@ -1626,7 +1640,7 @@ async function onSignedIn(u){
       if(!owner&&D.logs.length){try{localStorage.setItem('kadr_prelogin_backup',JSON.stringify(D));}catch(_){}}
       applyRemote(remote);setOwner(u.uid);Cloud.ready=true;
     }
-    if(Cloud.st!=='error'){Cloud.st='ok';Cloud.last=Date.now();if(fresh)toast('Synced ✓');}
+    if(Cloud.st!=='error'){Cloud.st='ok';Cloud.last=Date.now();}
     else toast('Sync problem: '+errText(Cloud.err));
     cloudListen();
   }catch(e){Cloud.ready=false;Cloud.st=navigator.onLine?'error':'offline';Cloud.err=e.code||e.message||'';toast(navigator.onLine?'Sync problem: '+errText(Cloud.err):'Offline. Working on this device.');}
@@ -1667,10 +1681,30 @@ async function syncNow(){
     if(Cloud.st==='error'){toast('Sync problem: '+errText(Cloud.err));return;}
     Cloud.ready=true;Cloud.st='ok';Cloud.last=Date.now();Cloud.err='';
     if(!Cloud.unsub)cloudListen();
-    toast('Synced ✓');
   }catch(e){Cloud.st=navigator.onLine?'error':'offline';Cloud.err=e.code||e.message||'';toast(navigator.onLine?'Sync problem: '+errText(Cloud.err):'Offline. Working on this device.');}
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&Cloud.ready&&Cloud.timer)pushNow();});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){if(Cloud.ready&&(Cloud.timer||Cloud.dirty))pushNow();}
+  else autoSync();
+});
+addEventListener('pagehide',()=>{if(Cloud.ready&&(Cloud.timer||Cloud.dirty))pushNow();});
+let autoBusy=false;
+async function autoSync(){
+  if(autoBusy||document.hidden||!Cloud.on||!Cloud.auth||!Cloud.user||!navigator.onLine)return;
+  autoBusy=true;
+  try{
+    if(!Cloud.ready){await onSignedIn(Cloud.user);return;}
+    if(!Cloud.ref)Cloud.ref=Cloud.fb.FS.doc(Cloud.db,'users',Cloud.user.uid);
+    if(Cloud.dirty){await pushNow();return;}
+    const snap=await Cloud.fb.FS.getDoc(Cloud.ref);
+    const remote=snap.exists()?parseRemote(snap.data()):null;
+    if(remote&&(remote.rev||0)>(D.rev||0))applyRemote(remote);
+    else if(!remote||(D.rev||0)>(remote.rev||0))await pushNow();
+    if(!Cloud.unsub)cloudListen();
+  }catch(e){}
+  finally{autoBusy=false;}
+}
+setInterval(autoSync,20000);
 async function signOutNow(){
   if(!confirm('Sign out of this device? Your data stays in your account.'))return;
   if(Cloud.ready)await pushNow();
