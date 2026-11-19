@@ -1054,7 +1054,7 @@ function openLog(item,o){
   if(!ex&&o.nd)ex=ph;
   let nd=!!o.nd||!!(ex&&ex.nd);
   const canToggle=!ex||ex.nd;                               /* an existing diary entry can't become "watched only" */
-  const st={rating:ex?ex.rating:(o.rating||(ph?ph.rating:0)),like:liked(item.key),rewatch:ex&&!ex.nd?!!ex.rewatch:dated.length>0,date:ex&&ex.date?ex.date:today(),spoiler:!!(ex&&ex.spoiler)};
+  const st={rating:ex?ex.rating:(o.rating||(ph?ph.rating:0)),like:liked(item.key),rewatch:ex&&!ex.nd?!!ex.rewatch:prior.length>0,date:ex&&ex.date?ex.date:today(),spoiler:!!(ex&&ex.spoiler)};
   const w=openSheet(`
     <div class="lgp-h"><button class="ibtn" id="lg-x" aria-label="Close">${I.xx}</button><h3 id="lg-h"></h3><button class="ibtn" id="lg-save" aria-label="Save">${I.check}</button></div>
     <div class="lgp-b">
@@ -1569,16 +1569,14 @@ async function renderPerson(el,id){
 
 /* ================= DIARY ================= */
 let diaryType='all';
-let diaryYear=String(new Date().getFullYear());
+let diaryYear='all';
 function renderDiary(){
   const el=$('#tab-diary');
-  if(diaryYear!=='all'&&!yearsOf().includes(diaryYear))diaryYear=String(new Date().getFullYear());
   let logs=[...D.logs].filter(l=>!l.nd&&l.date&&(diaryYear==='all'||l.date.slice(0,4)===diaryYear)).sort(cmpDesc);
   if(diaryType!=='all')logs=logs.filter(l=>l.item.type===diaryType);
-  const dAll=D.logs.filter(l=>!l.nd&&l.date),yD=diaryYear==='all'?String(new Date().getFullYear()):diaryYear;
-  let html=ystrip(diaryYear,dAll.length,dAll.filter(l=>l.date.slice(0,4)===yD).length,'diary entries');
+  let html='';
   if(!logs.length){
-    html+=`<div class="empty" style="padding-top:60px"><b>${diaryYear==='all'?'Your diary is empty':'Nothing logged in '+diaryYear}</b>Tap + to log a movie you watched.</div>`;
+    html+=`<div class="empty" style="padding-top:calc(60px + var(--top))"><b>Your diary is empty</b>Tap + to log a movie you watched.</div>`;
   }else{
     let cur='';
     for(const l of logs){
