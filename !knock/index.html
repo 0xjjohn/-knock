@@ -132,6 +132,7 @@ svg{width:22px;height:22px;flex:none}
 .act svg{width:28px;height:28px}
 .act.on{color:var(--g)}
 .act.heart.on svg{fill:currentColor}
+.act.heart.on{color:#ff8000}
 .rate{display:flex;flex-direction:column;align-items:center;border-top:1px solid var(--line);margin-top:8px;padding-top:6px}
 .rate small{color:var(--mut);font-size:11px;margin-bottom:4px}
 .ua .btn{width:calc(100% - 16px);margin:8px 8px 8px;height:44px;font-size:13px}
@@ -183,7 +184,7 @@ svg{width:22px;height:22px;flex:none}
 .dmeta{display:flex;align-items:center;gap:8px;color:var(--mut);min-height:16px}
 .dmeta svg{width:14px;height:14px}
 .dmeta .stars{font-size:13px}
-.dmeta .hv{color:var(--g)}
+.dmeta .hv{color:#ff8000}
 .dmeta .hv svg{fill:currentColor}
 .dev{font-size:11.5px;color:#bdbdbd;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 /* profile */
@@ -331,6 +332,8 @@ svg{width:22px;height:22px;flex:none}
 .ac3 svg{width:42px;height:42px;stroke-width:1.3}
 .ac3.on{color:var(--g)}
 .ac3.heart.on svg{fill:currentColor}
+.ac3.heart.on{color:#ff8000}
+.ac3[data-a="wl"].on{color:#40bcf4}
 .ac-rate{display:flex;flex-direction:column;align-items:center;padding:12px 0 14px;border-bottom:1px solid #242424}
 .ac-rate small{color:var(--mut);font-size:12px;margin-top:2px}
 .ac-list{padding:8px 0 4px}
@@ -474,7 +477,20 @@ a.opt{color:inherit}
 .en-r,.rv p,.dev,#lg-t,.sheet.fullpg .lgp-b textarea{font-family:"Times New Roman",Times,"Liberation Serif",serif}
 .en-ed{padding:0 16px 40px;color:var(--mut);font-size:11.5px}
 .lgp-n{padding:10px 16px;border-bottom:1px solid var(--line)}
+.lgp-n{display:flex;gap:18px;align-items:center}
+.lgp-n[hidden],.lgp-d[hidden]{display:none}
 .lgp-n button{color:var(--g);font-size:12.5px;font-weight:500}
+.lgp-n button#lg-rw{color:var(--mut)}
+.lgp-n button#lg-rw.on{color:var(--g)}
+.lg-ft{flex:none;display:flex;background:#000;border-top:1px solid var(--line);padding:12px 8px calc(12px + var(--safe))}
+.lgb{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:#5d6670;font-size:11.5px;padding:4px 6px}
+.lgb svg{width:44px;height:30px}
+.lgb.on{color:#fff}
+.spw{position:relative;cursor:pointer;margin:0}
+.spw:not(.rev) p{filter:blur(7px);user-select:none;pointer-events:none}
+.spw:not(.rev) .spt{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600;color:#fff}
+.spw:not(.rev) .spt small{font-size:10px;font-weight:400;color:var(--mut)}
+.spw.rev .spt{display:none}
 .lgp-h{flex:none;display:flex;align-items:center;gap:6px;background:#000;padding:calc(10px + var(--top)) 10px 10px}
 .lgp-h h3{flex:1;font-size:17.5px;font-weight:700;padding-left:8px}
 .lgp-h .ibtn{width:44px;height:44px;color:#fff}
@@ -494,7 +510,7 @@ a.opt{color:inherit}
 .lgp-r .hl{text-align:center}
 .lgp-r .hl button{display:block;margin:0 auto;color:#3a3a3a;padding:0}
 .lgp-r .hl button svg{width:36px;height:36px;fill:currentColor;stroke:none}
-.lgp-r .hl button.on{color:var(--g)}
+.lgp-r .hl button.on{color:#ff8000}
 .sheet.fullpg .lgp-b textarea{flex:1;min-height:140px;width:100%;margin:0;background:none;border:0;border-radius:0;padding:16px;font-size:17.5px;line-height:1.5;color:var(--text)}
 .sheet.fullpg .lgp-b textarea::placeholder{color:var(--mut)}
 .lgp-del{flex:none;padding:14px 16px calc(14px + var(--safe));color:#f87171;font-size:13px;font-weight:500;text-align:left}
@@ -503,7 +519,7 @@ a.opt{color:inherit}
 .en-l h2{font-size:20.5px;font-weight:700;line-height:1.25}
 .en-l h2 span{font-size:14px;font-weight:400;color:var(--mut);margin-left:4px}
 .en-l .stars{font-size:20.5px;margin-top:16px;gap:1px}
-.en-l .hv{color:var(--g);margin-left:10px;display:inline-flex;vertical-align:middle}
+.en-l .hv{color:#ff8000;margin-left:10px;display:inline-flex;vertical-align:middle}
 .en-l .hv svg{width:18px;height:18px;fill:currentColor}
 .en-d{margin-top:16px;color:var(--mut);font-size:12.5px}
 .en-p{flex:none;width:30%;max-width:130px;aspect-ratio:2/3;border-radius:6px;overflow:hidden;background:var(--card2);border:1px solid #262626;align-self:flex-start}
@@ -556,20 +572,6 @@ a.opt{color:inherit}
 .frs{padding:16px 18px;color:#ff8000;font-size:13px;font-weight:600;text-align:left}
 .fo{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 18px;font-size:13.5px;color:#d4d4d4;text-align:left}
 .fo svg{width:16px;height:16px;color:#fff;flex:none}
-.pc.lbk{position:relative;cursor:pointer}
-.pc.lbk .chk{position:absolute;inset:0;display:grid;place-items:center;background:#000;opacity:0;transition:opacity .2s;pointer-events:none}
-.pc.lbk.done .chk{opacity:1}
-.pc.lbk .chk svg{width:40px;height:40px;color:var(--g);stroke-width:1.6}
-.pc.lbk.in{animation:pkin .3s ease-out}
-.pc.lbk.own{opacity:.4}
-.pc.lbk.wide{aspect-ratio:16/9}
-.grid.lbg{gap:6px}
-.lbk .lt{position:absolute;left:0;right:0;bottom:0;padding:12px 5px 3px;font-size:8.5px;line-height:1.2;font-weight:500;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.88));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
-@keyframes pkin{from{opacity:0;transform:scale(.94)}}
-.lb-b{padding:2px 0 calc(20px + var(--safe))}
-.lb-q{flex:none;background:#000;padding:0 0 8px}
-.lb-q[hidden]{display:none}
-.lb-b .btn{margin:14px 16px 0;width:calc(100% - 32px)}
 .lgp-h h3 small{font-size:11.5px;color:var(--mut);margin-left:8px;font-weight:500}
 
 #pop .pp-m button.on{font-weight:700;color:#fff}
@@ -703,7 +705,7 @@ let D=load();
 if(D.lang!=='en-US'){D.lang='en-US';try{localStorage.setItem(LS,JSON.stringify(D));}catch(_){}}
 (function(){const m=new Map();let ch=false;
   D.logs=D.logs.filter(l=>{const k=l.item.key+'|'+l.date,p=m.get(k);if(!p){m.set(k,l);return true;}ch=true;
-    if(!p.review&&l.review)p.review=l.review;if(!p.rating&&l.rating)p.rating=l.rating;return false;});
+    if(!p.review&&l.review)p.review=l.review;if(l.spoiler)p.spoiler=true;if(!p.rating&&l.rating)p.rating=l.rating;return false;});
   if(ch)try{localStorage.setItem(LS,JSON.stringify(D));}catch(e){}
 })();
 let CLOUD_PUSH=null;
@@ -720,12 +722,13 @@ function setLike(it,on){
   if(on){if(!D.likes.includes(it.key))D.likes.push(it.key);D.likeItems[it.key]={key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster};}
   else{D.likes=D.likes.filter(k=>k!==it.key);delete D.likeItems[it.key];}
 }
-const newLog=(it,rating)=>({id:uid(),item:it,rating:rating||0,date:today(),review:'',rewatch:false,ts:Date.now()});
 const yearsOf=()=>{const y=new Set([String(new Date().getFullYear())]);D.logs.forEach(l=>{if(!l.nd&&l.date)y.add(l.date.slice(0,4));});return [...y].sort().reverse();};
 const filmsIn=y=>new Set(D.logs.filter(l=>!l.nd&&l.date&&(y==='all'||l.date.slice(0,4)===y)).map(l=>l.item.key)).size;
 const CHD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
-function ystrip(y,n,note){
-  return `<div class="ystat"><div class="yn"><b>${n}</b><span>${n===1?'film':'films'}${y==='all'?' in total':' in '+y}${note?' · '+note:''}</span></div><button class="ysel" data-yr="1">${y==='all'?'All time':y}${CHD}</button></div>`;
+const nfmt=n=>Number(n).toLocaleString('en-US');
+function ystrip(y,total,yc,unit){
+  const yy=y==='all'?String(new Date().getFullYear()):y;
+  return `<div class="ystat"><div class="yn"><b>${nfmt(total)} / ${nfmt(yc)}</b><span>${unit} · total / ${yy}</span></div><button class="ysel" data-yr="1">${y==='all'?'All time':y}${CHD}</button></div>`;
 }
 function yearPop(anchor,cur,set){
   openPop(anchor,[{k:'all',t:'All time',on:cur==='all'},...yearsOf().map(y=>({k:y,t:y,on:cur===y}))],set);
@@ -1022,272 +1025,92 @@ function openAdd(o){
 
 
 /* ================= LIBRARY picker (add watched films without diary) ================= */
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
-const GEN_M=[['all','Any'],['28','Action'],['12','Adventure'],['16','Animation'],['35','Comedy'],['80','Crime'],['99','Documentary'],['18','Drama'],['10751','Family'],['14','Fantasy'],['36','History'],['27','Horror'],['10402','Music'],['9648','Mystery'],['10749','Romance'],['878','Sci-Fi'],['53','Thriller'],['10752','War'],['37','Western']];
-const GEN_T=[['all','Any'],['10759','Action & Adventure'],['16','Animation'],['35','Comedy'],['80','Crime'],['99','Documentary'],['18','Drama'],['10751','Family'],['10762','Kids'],['9648','Mystery'],['10764','Reality'],['10765','Sci-Fi & Fantasy'],['10768','War & Politics'],['37','Western']];
-const LANGS=[['all','Any'],['en','English'],['ar','Arabic'],['fr','French'],['es','Spanish'],['hi','Hindi'],['ja','Japanese'],['ko','Korean'],['tr','Turkish'],['it','Italian'],['de','German'],['zh','Chinese'],['ru','Russian']];
-const SORTS={movie:{pop:'popularity.desc',top:'vote_average.desc',new:'primary_release_date.desc',old:'primary_release_date.asc'},tv:{pop:'popularity.desc',top:'vote_average.desc',new:'first_air_date.desc',old:'first_air_date.asc'}};
-const lp={type:'movie',sort:'pop',year:'all',genre:'all',lang:'all',rate:'all'};
 const newNd=(it,rating)=>({id:uid(),item:{key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster},rating:rating||0,date:'',nd:true,review:'',rewatch:false,ts:Date.now()});
-
-/* change poster / backdrop for any title (used outside the title page) */
-async function openArtFor(it){
-  const w=subSheet('Change poster / backdrop',`<div class="chips" id="ar-t"><button class="chip on" data-t="p">Posters</button><button class="chip" data-t="b">Backdrops</button></div><div id="ar-b">${spin}</div><button class="btn ghost" id="ar-r">Reset to default</button>`);
-  let imgs,tab='p';
-  try{imgs=await tmdb(`/${it.type}/${it.id}/images`,{language:'en',include_image_language:'en,null'});}
-  catch(e){$('#ar-b',w).innerHTML=errBox(esc(e.message||''));return;}
-  const lists={p:(imgs.posters||[]).slice(0,30),b:(imgs.backdrops||[]).slice(0,24)};
-  const art=()=>(D.art&&D.art[it.key])||{};
-  const draw=()=>{
-    const cur=art()[tab]||(tab==='p'?it.poster:null),arr=lists[tab];
-    $('#ar-b',w).innerHTML=arr.length?`<div class="grid${tab==='b'?' bd2':''}">${arr.map(x=>`<button class="pc art${tab==='b'?' wide':''}${x.file_path===cur?' sel':''}" data-f="${x.file_path}"><img loading="lazy" src="${IMG}${tab==='p'?'w342':'w500'}${x.file_path}" alt=""><span class="seen">${I.check}</span></button>`).join('')}</div>`:'<div class="empty"><b>No images</b>Nothing else is available for this title.</div>';
-  };
-  w.addEventListener('click',async e=>{
-    const t=e.target.closest('#ar-t [data-t]');
-    if(t){tab=t.dataset.t;$$('#ar-t .chip',w).forEach(c=>c.classList.toggle('on',c===t));draw();return;}
-    const f=e.target.closest('[data-f]');
-    if(f){D.art=D.art||{};D.art[it.key]=Object.assign({},D.art[it.key],{[tab]:f.dataset.f});if(tab==='p'){it.poster=f.dataset.f;setPoster(it.key,it.poster);}else save();draw();return;}
-    if(e.target.closest('#ar-r')){
-      if(D.art)delete D.art[it.key];save();
-      try{const j=await tmdb('/'+it.type+'/'+it.id);it.poster=j.poster_path||null;setPoster(it.key,it.poster);}catch(_){}
-      draw();
-    }
-  });
-  draw();
+/* mark as watched (Films only, never the diary) / remove it again */
+function markWatched(it){
+  if(watched(it.key))return false;
+  D.logs.push(newNd(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==it.key);return true;
 }
-
-/* the same actions sheet as a normal title, but "Review or log" never goes to the diary */
-function libActions(it,cb){
-  cb=cb||{};
-  const w=openSheet(`<div class="ac-grab"></div><div class="ac-h"><b>${esc(it.title)}</b><small>${esc(it.year)}</small></div><div class="ac-body"></div>`,'actsheet');
-  w._onclose=()=>{if(cb.close)cb.close();};
-  const body=$('.ac-body',w);
-  const draw=()=>{
-    const k=it.key,wch=watched(k),lk=liked(k),wl=inWL(k),r=(logsOf(k).find(l=>l.rating)||{}).rating||0;
-    body.innerHTML=`<div class="ac-row3">
-      <button class="ac3${wch?' on':''}" data-a="watch">${I.eye}<span>${wch?'Watched':'Watch'}</span></button>
-      <button class="ac3 heart${lk?' on':''}" data-a="like">${I.heart}<span>Like</span></button>
-      <button class="ac3${wl?' on':''}" data-a="wl">${I.clockplus}<span>Watchlist</span></button></div>
-      <div class="ac-rate"><div class="pkm2"></div><small>${r?'Rated '+(r/2):'Rate'}</small></div>
-      <div class="ac-list">
-        <button class="ac-i" data-a="log">${I.plus}<span>Review or log</span></button>
-        <button class="ac-i" data-a="lists">${I.listplus}<span>Add to lists</span></button>
-        <button class="ac-i" data-a="poster">${I.expand}<span>View poster</span></button>
-        <button class="ac-i" data-a="art">${I.brush}<span>Change poster / backdrop</span></button>
-        <button class="ac-i" data-a="share">${I.share}<span>Share</span></button></div>`;
-    $('.pkm2',body).appendChild(picker(r,n=>{
-      const L=logsOf(k),t=L.find(l=>l.nd)||L[0];
-      if(!t){if(!n)return;D.logs.push(newNd(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
-      else t.rating=n;
-      save();refreshAll();draw();
-    },42));
-  };
-  draw();
-  w.addEventListener('click',e=>{
-    const b=e.target.closest('[data-a]');if(!b)return;
-    const a=b.dataset.a,k=it.key;
-    if(a==='watch'){
-      if(!watched(k)){D.logs.push(newNd(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
-      else{
-        const risky=logsOf(k).some(l=>!l.nd||l.review||l.rating);
-        if(risky&&!confirm('Remove from watched? All your entries for it will be deleted.'))return;
-        D.logs=D.logs.filter(l=>l.item.key!==k);
-      }
-      save();refreshAll();draw();
-    }
-    else if(a==='like'){setLike(it,!liked(k));save();refreshAll();draw();}
-    else if(a==='wl'){toggleWL(it);draw();}
-    else if(a==='log')openLog(it,{nd:true,rating:(logsOf(k).find(l=>l.rating)||{}).rating||0,after:draw});
-    else if(a==='lists')openLists(it);
-    else if(a==='poster')viewPoster(it.poster,it.title);
-    else if(a==='art')openArtFor(it);
-    else if(a==='share')shareTitle(it);
-  });
-}
-
-function openLibrary(){
-  let owned=new Set(D.logs.map(l=>l.item.key));
-  const addedKeys=new Set();
-  const B={items:[],queue:[],seen:new Set()},Sx={items:[],queue:[],seen:new Set()};
-  let page=0,loading=false,q='',moreBusy=false,seq=0;
-  const V=()=>q?Sx:B;
-  const w=openSheet(`<div class="lgp-h fp-h"><button class="ibtn" data-fpb aria-label="Back">${I.arrow}</button><h3>Library<small id="lb-n"></small></h3><button class="ibtn" id="lb-s" aria-label="Search">${I.search}</button><button class="ibtn" id="lb-f" aria-label="Filter">${I.filter}</button></div>
-    <div class="lb-q" hidden><div class="search">${I.search}<input id="lb-i" type="search" placeholder="Movie, series, actor, director…" autocomplete="off"></div></div>
-    <div class="lgp-b lb-b"><div id="lb-g"></div></div>`,'fullpg');
-  $('[data-fpb]',w).onclick=closeTop;
-  w._onclose=()=>{refreshAll();};
-  const G=$('#lb-g',w),inp=$('#lb-i',w),qb=$('.lb-q',w);
-  const cnt=()=>{$('#lb-n',w).textContent=addedKeys.size?addedKeys.size+' added':'';};
-  const params=pg=>{
-    const t=lp.type,p={sort_by:SORTS[t][lp.sort],page:pg,include_adult:'false','vote_count.gte':lp.sort==='top'?300:50};
-    if(lp.sort==='new')p[t==='movie'?'primary_release_date.lte':'first_air_date.lte']=today();
-    if(lp.year!=='all')p[t==='movie'?'primary_release_year':'first_air_date_year']=lp.year;
-    if(lp.genre!=='all')p.with_genres=lp.genre;
-    if(lp.lang!=='all')p.with_original_language=lp.lang;
-    if(lp.rate!=='all'){p['vote_average.gte']=lp.rate;p['vote_count.gte']=Math.max(p['vote_count.gte'],200);}
-    return p;
-  };
-  const usable=(it,v)=>it&&it.poster&&!owned.has(it.key)&&!v.seen.has(it.key);
-  const take=v=>{while(v.queue.length){const it=v.queue.shift();if(usable(it,v)){v.seen.add(it.key);return it;}}return null;};
-  const more=async()=>{
-    if(loading)return;loading=true;
-    try{const j=await tmdb('/discover/'+lp.type,params(++page));(j.results||[]).forEach(r=>B.queue.push(nrm(r,lp.type)));}catch(e){}
-    loading=false;
-  };
-  const cell=it=>`<a class="pc lbk${owned.has(it.key)?' own':''}" data-k="${it.key}" data-key="${it.key}">${posterImg(it.poster,it.title)}</a>`;
-  const draw=()=>{
-    const v=V();
-    G.innerHTML=v.items.length?`<div class="grid">${v.items.map(cell).join('')}</div>`:`<div class="empty"><b>No results</b>${q?'Try a title, an actor, a director or a writer.':'Try changing the filters.'}</div>`;
-  };
-  const load=async()=>{
-    B.items=[];B.queue=[];B.seen.clear();page=0;
-    if(!q)G.innerHTML=spin;
-    await more();
-    for(let i=0;i<30;i++){let n=take(B);if(!n&&page<6){await more();n=take(B);}if(!n)break;B.items.push(n);}
-    if(!q){draw();fillCheck();}
-  };
-  const showMore=async()=>{
-    if(moreBusy||q)return;moreBusy=true;
-    const add=[];
-    for(let i=0;i<12;i++){let n=take(B);if(!n&&page<40){await more();n=take(B);}if(!n)break;add.push(n);}
-    B.items.push(...add);
-    const g=$('.grid',G);if(g&&!q)g.insertAdjacentHTML('beforeend',add.map(cell).join(''));
-    moreBusy=false;
-    if(add.length)fillCheck();
-  };
-  const fillCheck=()=>{const e=$('.lb-b',w);if(e&&!q&&e.scrollHeight-e.scrollTop-e.clientHeight<700)showMore();};
-  $('.lb-b',w).addEventListener('scroll',fillCheck,{passive:true});
-
-  /* search: titles + films of any actor / director / writer matching the text */
-  const CREW=new Set(['Director','Writer','Screenplay','Story','Novel','Creator']);
-  const runSearch=debounce(async()=>{
-    const my=++seq;q=inp.value.trim();
-    if(!q){draw();return;}
-    G.innerHTML=spin;
-    try{
-      const j=await tmdb('/search/multi',{query:q,include_adult:'false'});
-      if(my!==seq)return;
-      const res=j.results||[];
-      const titles=res.filter(r=>(r.media_type==='movie'||r.media_type==='tv')&&r.poster_path).map(r=>nrm(r));
-      const people=res.filter(r=>r.media_type==='person').slice(0,2);
-      let credits=[];
-      for(const pe of people){
-        try{
-          const c=await tmdb('/person/'+pe.id+'/combined_credits');
-          const rows=[...(c.cast||[]).filter(x=>!/^(self|himself|herself)/i.test(x.character||'')&&!(x.genre_ids||[]).some(g=>g===10767||g===10763||g===10764)),...(c.crew||[]).filter(x=>CREW.has(x.job))];
-          rows.filter(x=>(x.media_type==='movie'||x.media_type==='tv')&&x.poster_path).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,60).forEach(x=>credits.push(nrm(x)));
-        }catch(_){}
-      }
-      if(my!==seq)return;
-      const personFirst=res[0]&&res[0].media_type==='person';
-      const all=personFirst?[...credits,...titles]:[...titles,...credits];
-      const m=new Map();all.forEach(it=>{if(!m.has(it.key))m.set(it.key,it);});
-      const list=[...m.values()];
-      Sx.items=list.slice(0,30);Sx.queue=list.slice(30);Sx.seen=new Set(Sx.items.map(x=>x.key));
-      draw();
-    }catch(e){if(my===seq)G.innerHTML=errBox();}
-  },380);
-  inp.addEventListener('input',runSearch);
-  $('#lb-s',w).onclick=()=>{
-    qb.hidden=!qb.hidden;
-    if(qb.hidden){inp.value='';q='';seq++;draw();}else inp.focus();
-  };
-  $('#lb-f',w).onclick=()=>{
-    const gl=lp.type==='movie'?GEN_M:GEN_T;
-    const yrs=[['all','Any']];for(let y=new Date().getFullYear();y>=1920;y--)yrs.push([String(y),String(y)]);
-    openFilter([
-      {k:'sort',t:'Sort by',top:1,d:'pop',o:[['pop','Popular'],['top','Top rated'],['new','Release date newest'],['old','Release date oldest']]},
-      {k:'type',t:'Film/TV',d:'movie',o:[['movie','Films'],['tv','TV']]},
-      {k:'year',t:'Year',d:'all',o:yrs},
-      {k:'genre',t:'Genre',d:'all',o:gl},
-      {k:'lang',t:'Language',d:'all',o:LANGS},
-      {k:'rate',t:'Rating',d:'all',o:[['all','Any'],['6','6+'],['7','7+'],['8','8+']]}
-    ],k=>lp[k],(k,v)=>{lp[k]=v;},{done:()=>{
-      const gl2=lp.type==='movie'?GEN_M:GEN_T;if(!gl2.some(([v])=>v===lp.genre))lp.genre='all';
-      q='';inp.value='';qb.hidden=true;seq++;
-      load();
-    }});
-  };
-
-  /* after the actions sheet closes: if the film was added, a related one takes its place */
-  const replaceTile=async(el,it,v,wasSearch)=>{
-    let n=null;
-    const sim=await tmdb('/'+it.type+'/'+it.id+'/recommendations').then(j=>(j.results||[]).map(r=>nrm(r,it.type))).catch(()=>[]);
-    if(wasSearch){
-      n=take(v);
-      if(!n){v.queue.push(...sim);n=take(v);}
-    }else{
-      v.queue.unshift(...sim);
-      n=take(v);if(!n){await more();n=take(v);}
-    }
-    if(!el.isConnected)return;
-    const idx=v.items.indexOf(it);
-    if(n){
-      if(idx>=0)v.items[idx]=n;
-      const t=document.createElement('div');t.innerHTML=cell(n);const ne=t.firstChild;ne.classList.add('in');el.replaceWith(ne);
-    }else{if(idx>=0)v.items.splice(idx,1);el.remove();}
-    if(!wasSearch&&v.queue.length<8)more();
-  };
-  G.addEventListener('click',e=>{
-    const el=e.target.closest('.lbk');if(!el)return;
-    const v=V(),wasSearch=!!q;
-    const it=v.items.find(x=>x.key===el.dataset.k);if(!it)return;
-    const had=owned.has(it.key);
-    if(!had){D.logs.push(newNd(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==it.key);save();}
-    libActions(it,{close:()=>{
-      owned=new Set(D.logs.map(l=>l.item.key));
-      const has=owned.has(it.key);
-      if(has&&!had)addedKeys.add(it.key);else if(!has)addedKeys.delete(it.key);
-      cnt();
-      if(has&&!had)replaceTile(el,it,v,wasSearch);
-      else if(el.isConnected)el.classList.toggle('own',has);
-    }});
-  });
-  load();
+function unWatch(k){
+  const L=logsOf(k),dated=L.filter(l=>!l.nd);
+  if(dated.length&&!confirm('Remove from your films? Its '+dated.length+' diary '+(dated.length>1?'entries':'entry')+' will be deleted too.'))return false;
+  if(!dated.length&&L.some(l=>l.review)&&!confirm('Remove from your films? Your review for it will be deleted.'))return false;
+  D.logs=D.logs.filter(l=>l.item.key!==k);return true;
 }
 
 /* ================= LOG sheet ================= */
 const fmtLong=d=>{if(!d)return '';const p=dateParts(d);return new Date(p.y,p.m-1,p.d).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});};
+const EYEC='<svg viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16C9 7 16 3 24 3s15 4 21 13c-6 9-13 13-21 13S9 25 3 16z"/><path d="M17 16.5l5 5 9-10"/></svg>';
+const EYEX='<svg viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16C9 7 16 3 24 3s15 4 21 13c-6 9-13 13-21 13S9 25 3 16z"/><circle cx="24" cy="16" r="5"/><path d="M8 28L40 4"/></svg>';
+let logBusy=false;
 function openLog(item,o){
   o=o||{};
   let ex=o.logId?D.logs.find(l=>l.id===o.logId):null;
   const prior=logsOf(item.key);
-  if(!ex&&!o.fresh)ex=prior.find(l=>o.nd?l.nd:!l.nd)||null;
-  const nd=!!o.nd||!!(ex&&ex.nd);
-  const st={rating:ex?ex.rating:(o.rating||0),like:liked(item.key),rewatch:ex?!!ex.rewatch:prior.some(l=>!l.nd),date:ex&&ex.date?ex.date:today()};
+  const ph=prior.find(l=>l.nd)||null;                       /* "watched, no date" record */
+  const dated=prior.filter(l=>!l.nd);
+  /* Log = a new viewing. Only a same-day entry is reopened (so a review can be added to it). */
+  if(!ex&&!o.fresh&&!o.nd)ex=dated.find(l=>l.date===today())||null;
+  if(!ex&&o.nd)ex=ph;
+  let nd=!!o.nd||!!(ex&&ex.nd);
+  const canToggle=!ex||ex.nd;                               /* an existing diary entry can't become "watched only" */
+  const st={rating:ex?ex.rating:(o.rating||(ph?ph.rating:0)),like:liked(item.key),rewatch:ex&&!ex.nd?!!ex.rewatch:dated.length>0,date:ex&&ex.date?ex.date:today(),spoiler:!!(ex&&ex.spoiler)};
   const w=openSheet(`
-    <div class="lgp-h"><button class="ibtn" id="lg-x" aria-label="Close">${I.xx}</button><h3>${nd?'Add movie':'I Watched'}</h3><button class="ibtn" id="lg-save" aria-label="Save">${I.check}</button></div>
+    <div class="lgp-h"><button class="ibtn" id="lg-x" aria-label="Close">${I.xx}</button><h3 id="lg-h"></h3><button class="ibtn" id="lg-save" aria-label="Save">${I.check}</button></div>
     <div class="lgp-b">
       <div class="lgp-t"><div class="lg-p">${posterImg(item.poster,item.title,'w154')}</div><b>${esc(item.title)}</b></div>
-      ${nd?'':`<div class="lgp-d"><span>Date</span><span class="dv"><span id="lg-dt"></span><input type="date" id="lg-d" max="${today()}"><button class="dx" id="lg-dx" aria-label="Reset to today">${I.xx}</button></span></div>`}
-      ${ex&&!nd?'<div class="lgp-n"><button id="lg-again">Log another viewing</button></div>':''}
+      <div class="lgp-d" id="lg-dr"><span>Date</span><span class="dv"><span id="lg-dt"></span><input type="date" id="lg-d" max="${today()}"><button class="dx" id="lg-dx" aria-label="Reset to today">${I.xx}</button></span></div>
+      <div class="lgp-n" id="lg-nr"><button id="lg-rw" class="${st.rewatch?'on':''}">Rewatch</button>${ex&&!ex.nd?'<button id="lg-again">Log another viewing</button>':''}</div>
       <div class="lgp-r"><div><div id="lg-pk"></div><small>Rate</small></div><div class="hl"><button id="lg-like" class="${st.like?'on':''}" aria-label="Like">${I.heart}</button><small>Like</small></div></div>
-      <textarea id="lg-t" placeholder="Add review…">${esc(ex?ex.review:'')}</textarea>
-    </div>`,'fullpg');
-  if(!nd){
-    const di=$('#lg-d',w),dt=$('#lg-dt',w),dx=$('#lg-dx',w);
-    const paintD=()=>{di.value=st.date;dt.textContent=fmtLong(st.date);dx.hidden=st.date===today();};
-    paintD();
-    di.addEventListener('change',()=>{if(di.value){st.date=di.value>today()?today():di.value;paintD();}});
-    di.addEventListener('click',()=>{try{di.showPicker&&di.showPicker();}catch(_){}});
-    dx.onclick=()=>{st.date=today();paintD();};
-  }
+      <textarea id="lg-t" placeholder="Add review…">${esc(ex?ex.review:(ph?ph.review:''))}</textarea>
+    </div>
+    <div class="lg-ft"><button id="lg-seen" class="lgb${nd?' on':''}"${canToggle?'':' style="visibility:hidden"'}>${EYEC}<span>I’ve seen this film before</span></button><button id="lg-spl" class="lgb${st.spoiler?' on':''}">${EYEX}<span>Contains spoilers</span></button></div>`,'fullpg');
+  const di=$('#lg-d',w),dt=$('#lg-dt',w),dx=$('#lg-dx',w);
+  const paintD=()=>{di.value=st.date;dt.textContent=fmtLong(st.date);dx.hidden=st.date===today();};
+  const paintM=()=>{
+    $('#lg-h',w).textContent=nd?'Watched':'I Watched';
+    $('#lg-dr',w).hidden=nd;$('#lg-nr',w).hidden=nd;
+    $('#lg-seen',w).classList.toggle('on',nd);
+  };
+  paintD();paintM();
+  di.addEventListener('change',()=>{if(di.value){st.date=di.value>today()?today():di.value;paintD();}});
+  di.addEventListener('click',()=>{try{di.showPicker&&di.showPicker();}catch(_){}});
+  dx.onclick=()=>{st.date=today();paintD();};
+  $('#lg-rw',w).onclick=e=>{st.rewatch=!st.rewatch;e.currentTarget.classList.toggle('on',st.rewatch);};
   $('#lg-pk',w).appendChild(picker(st.rating,n=>{st.rating=n;},40));
   $('#lg-like',w).onclick=e=>{st.like=!st.like;e.currentTarget.classList.toggle('on',st.like);};
+  $('#lg-seen',w).onclick=()=>{if(!canToggle)return;nd=!nd;paintM();};
+  $('#lg-spl',w).onclick=e=>{st.spoiler=!st.spoiler;e.currentTarget.classList.toggle('on',st.spoiler);};
   $('#lg-x',w).onclick=closeTop;
   const again=$('#lg-again',w);
   if(again)again.onclick=()=>{closeTop();setTimeout(()=>openLog(item,{fresh:true}),130);};
   $('#lg-save',w).onclick=()=>{
-    const date=nd?'':(st.date||today()),review=$('#lg-t',w).value.trim();
-    if(!nd&&D.logs.some(l=>l.item.key===item.key&&l.date===date&&l!==ex)){toast('Already logged on that day. Pick a different date.');return;}
-    if(ex){
-      if(review&&review!==(ex.review||'')&&!nd)ex.reviewAt=today();
-      Object.assign(ex,{rating:st.rating,date,review,rewatch:st.rewatch});
+    if(logBusy)return;
+    const review=$('#lg-t',w).value.trim();
+    if(nd){
+      /* watched before: Films only, never the diary */
+      if(ex&&ex.nd){Object.assign(ex,{rating:st.rating,review});if(st.spoiler)ex.spoiler=true;else delete ex.spoiler;}
+      else if(!watched(item.key)){const nl=newNd(item,st.rating);nl.review=review;if(st.spoiler)nl.spoiler=true;D.logs.push(nl);}
+      else{
+        const t=logsOf(item.key)[0];if(t&&st.rating&&!t.rating)t.rating=st.rating;
+        toast('Already in your films');
+      }
     }else{
-      const nl={id:uid(),item:{key:item.key,id:item.id,type:item.type,title:item.title,year:item.year,poster:item.poster},rating:st.rating,date,review,rewatch:nd?false:st.rewatch,ts:Date.now()};
-      if(nd)nl.nd=true;
-      D.logs.push(nl);
+      const date=st.date||today();
+      if(D.logs.some(l=>l.item.key===item.key&&!l.nd&&l.date===date&&l!==ex)){toast('Already logged on that day. Pick a different date.');return;}
+      if(ex&&!ex.nd){
+        if(review&&review!==(ex.review||''))ex.reviewAt=today();
+        Object.assign(ex,{rating:st.rating,date,review,rewatch:st.rewatch});
+        if(st.spoiler)ex.spoiler=true;else delete ex.spoiler;
+      }else{
+        if(ex&&ex.nd)D.logs=D.logs.filter(l=>l!==ex);        /* a dated entry replaces the "no date" record */
+        else if(ph)D.logs=D.logs.filter(l=>l!==ph);
+        const nl={id:uid(),item:{key:item.key,id:item.id,type:item.type,title:item.title,year:item.year,poster:item.poster},rating:st.rating,date,review,rewatch:st.rewatch,ts:Date.now()};
+        if(st.spoiler)nl.spoiler=true;
+        D.logs.push(nl);
+      }
     }
+    logBusy=true;setTimeout(()=>{logBusy=false;},700);
     setLike(item,st.like);
     D.watchlist=D.watchlist.filter(i=>i.key!==item.key);
     save();if(nd)closeTop();else closeAll();refreshAll();toast('Saved ✓');
@@ -1301,15 +1124,17 @@ function openEntry(id){
     <div class="lgp-h"><button class="ibtn" id="en-x" aria-label="Back">${I.arrow}</button><h3></h3><button class="ibtn" id="en-ed" aria-label="Options">${I.dots}</button></div>
     <div class="lgp-b">
       <div class="en-top"><div class="en-l"><h2>${esc(it.title)}<span>${esc(it.year)}</span></h2>${l.rating?starsHTML(l.rating):''}${liked(it.key)?`<span class="hv">${I.heart}</span>`:''}${l.nd?'':`<div class="en-d">Watched ${esc(fmtLong(l.date))}</div>`}</div><a class="en-p" href="#/${it.type}/${it.id}">${posterImg(it.poster,it.title,'w342')}</a></div>
-      ${l.review?`<p class="en-r" dir="auto">${esc(l.review)}</p>`:''}
+      ${l.review?(l.spoiler?`<div class="spw" data-sp><div class="spt">Contains spoilers<small>Tap to read</small></div><p class="en-r" dir="auto">${esc(l.review)}</p></div>`:`<p class="en-r" dir="auto">${esc(l.review)}</p>`):''}
       ${l.review&&!l.nd&&l.reviewAt&&l.reviewAt!==l.date?`<div class="en-ed">Edited on ${esc(fmtDate(l.reviewAt))}</div>`:''}
     </div>`,'fullpg');
   $('#en-x',w).onclick=closeTop;
+  const sp=$('[data-sp]',w);if(sp)sp.onclick=()=>sp.classList.add('rev');
   $('#en-ed',w).onclick=()=>{
     openPop($('#en-ed',w),[{k:'edit',t:'Edit'},{k:'del',t:'Delete log',red:1}],k=>{
       if(k==='edit'){openLog(it,{logId:l.id});return;}
-      if(!confirm('Delete this log?'))return;
+      if(!confirm(l.nd?'Remove this film from your films?':'Delete this diary entry? The film stays in your films.'))return;
       D.logs=D.logs.filter(x=>x.id!==l.id);
+      if(!l.nd&&!D.logs.some(x=>x.item.key===it.key))D.logs.push(newNd(it,l.rating));
       save();closeAll();refreshAll();toast('Log deleted');
     });
   };
@@ -1652,7 +1477,7 @@ async function renderTitle(el,kind,id){
         const cur=logsOf(k);
         if(!cur.length){
           if(!n)return;
-          D.logs.push(newLog(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);
+          D.logs.push(newNd(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);
         }else cur[0].rating=n;
         save();refreshAll();draw();
       },42));
@@ -1662,8 +1487,8 @@ async function renderTitle(el,kind,id){
       const b=e.target.closest('[data-a]');if(!b)return;
       const a=b.dataset.a,k=it.key;
       if(a==='watch'){
-        if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
-        else{if(!confirm('Remove from watched? All your entries for it will be deleted.'))return;D.logs=D.logs.filter(l=>l.item.key!==k);}
+        if(!watched(k))markWatched(it);
+        else if(!unWatch(k))return;
         save();refreshAll();draw();
       }
       else if(a==='like'){setLike(it,!liked(k));save();refreshAll();draw();}
@@ -1683,8 +1508,8 @@ async function renderTitle(el,kind,id){
     else if(a==='poster')openActions();
     else if(a==='ov'){const p=$('.ov',el);const c=p.classList.toggle('cl4');b.classList.toggle('open',!c);}
     else if(a==='eye'){
-      if(!watched(k)){D.logs.push(newLog(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
-      else{if(!confirm('Remove from watched? All your entries for it will be deleted.'))return;D.logs=D.logs.filter(l=>l.item.key!==k);}
+      if(!watched(k))markWatched(it);
+      else if(!unWatch(k))return;
       save();refreshAll();
     }
     else if(a==='like'){setLike(it,!liked(k));save();refreshAll();}
@@ -1750,7 +1575,8 @@ function renderDiary(){
   if(diaryYear!=='all'&&!yearsOf().includes(diaryYear))diaryYear=String(new Date().getFullYear());
   let logs=[...D.logs].filter(l=>!l.nd&&l.date&&(diaryYear==='all'||l.date.slice(0,4)===diaryYear)).sort(cmpDesc);
   if(diaryType!=='all')logs=logs.filter(l=>l.item.type===diaryType);
-  let html=ystrip(diaryYear,filmsIn(diaryYear));
+  const dAll=D.logs.filter(l=>!l.nd&&l.date),yD=diaryYear==='all'?String(new Date().getFullYear()):diaryYear;
+  let html=ystrip(diaryYear,dAll.length,dAll.filter(l=>l.date.slice(0,4)===yD).length,'diary entries');
   if(!logs.length){
     html+=`<div class="empty" style="padding-top:60px"><b>${diaryYear==='all'?'Your diary is empty':'Nothing logged in '+diaryYear}</b>Tap + to log a movie you watched.</div>`;
   }else{
@@ -1794,7 +1620,7 @@ function filmsGroups(){
 function filmsFilter(x){
   if(libF.type!=='all'&&x.item.type!==libF.type)return false;
   if(libF.src==='diary'&&!x.hasD)return false;
-  if(libF.src==='nodiary'&&!x.hasND)return false;
+  if(libF.src==='nodiary'&&x.hasD)return false;
   const y=x.item.year||'';
   if(libF.rel!=='all'&&y!==libF.rel)return false;
   if(libF.dec!=='all'&&(y.slice(0,3)+'0s')!==libF.dec)return false;
@@ -1816,7 +1642,7 @@ function renderProfile(){
   const el=$('#tab-profile'),lib=library();
   const cnt=Array(10).fill(0);lib.forEach(x=>{if(x.rating)cnt[x.rating-1]++;});
   const mx=Math.max(1,...cnt);
-  const nfmt=n=>n.toLocaleString('en-US'),dEnt=D.logs.filter(l=>!l.nd&&l.date);
+  const dEnt=D.logs.filter(l=>!l.nd&&l.date);
   const favs=D.favs.map((f,i)=>f?`<button class="fav" data-fav="${i}" aria-label="${esc(f.title)}">${posterImg(f.poster,f.title)}</button>`:`<button class="fav empty" data-pick="${i}" aria-label="Add favorite">+</button>`).join('');
   const rows=[
     ['Films',nfmt(lib.length)+' / '+nfmt(filmsIn(String(new Date().getFullYear())))+' this year','#/me/films'],
@@ -1860,9 +1686,8 @@ $('#tab-profile').addEventListener('click',e=>{
   else if(b.dataset.p==='edit')editProfile();
   else if(b.dataset.p==='more'){
     const signed=Cloud.on&&(Cloud.user||getCached());
-    openPop(b,[{k:'lib',t:'Library',ic:I.layers},{k:'sync',t:'Sync data',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-15.5 6.2L3 16M3 12a9 9 0 0115.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/></svg>'},signed?{k:'out',t:'Sign out',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',red:1}:{k:'in',t:'Sign in',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>'}],k=>{
-      if(k==='lib')openLibrary();
-      else if(k==='sync'){if(Cloud.on&&!signed){setGuest(false);showAuth(true);}else syncNow();}
+    openPop(b,[{k:'sync',t:'Sync data',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-15.5 6.2L3 16M3 12a9 9 0 0115.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/></svg>'},signed?{k:'out',t:'Sign out',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',red:1}:{k:'in',t:'Sign in',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>'}],k=>{
+      if(k==='sync'){if(Cloud.on&&!signed){setGuest(false);showAuth(true);}else syncNow();}
       else if(k==='out')signOutNow();
       else{setGuest(false);showAuth(true);}
     });
@@ -1895,7 +1720,7 @@ function renderMe(el,sub){
       else if(libF.sort==='relo')l=[...l].sort((a,b)=>(a.item.year||'9999').localeCompare(b.item.year||'9999'));
       else if(libF.sort==='name')l=[...l].sort((a,b)=>a.item.title.localeCompare(b.item.title));
       const cy=String(new Date().getFullYear());
-      body=`<div style="height:calc(58px + var(--top))"></div>`+ystrip(libF.year,l.length,libF.year==='all'?filmsIn(cy)+' this year':'')+(l.length?`<div class="grid">${l.map(x=>`<div class="lc"><a class="pc seen" href="#/${x.item.type}/${x.item.id}" data-key="${x.item.key}">${posterImg(x.item.poster,x.item.title)}</a><div class="lstars">${x.rating?starsHTML(x.rating):''}${liked(x.item.key)?'<span style="color:var(--g)">♥</span>':''}</div></div>`).join('')}</div>`:`<div class="empty"><b>${libF.year==='all'?'Your library is empty':'Nothing in '+libF.year}</b>Anything you log shows up here.</div>`);
+      body=`<div style="height:calc(58px + var(--top))"></div>`+ystrip(libF.year,library().length,filmsIn(libF.year==='all'?cy:libF.year),'films')+(l.length?`<div class="grid">${l.map(x=>`<div class="lc"><a class="pc seen" href="#/${x.item.type}/${x.item.id}" data-key="${x.item.key}">${posterImg(x.item.poster,x.item.title)}</a><div class="lstars">${x.rating?starsHTML(x.rating):''}${liked(x.item.key)?'<span style="color:var(--g)">♥</span>':''}</div></div>`).join('')}</div>`:`<div class="empty"><b>${libF.year==='all'?'Your library is empty':'Nothing in '+libF.year}</b>Anything you log shows up here.</div>`);
     }else if(sub==='watchlist'){
       body=D.watchlist.length?`<div class="grid">${D.watchlist.map(pc).join('')}</div>`:'<div class="empty"><b>Your watchlist is empty</b>Tap the bookmark on any movie to add it here.</div>';
     }else if(sub==='lists'){
@@ -1908,7 +1733,7 @@ function renderMe(el,sub){
       body=li.length?`<div class="grid">${li.map(pc).join('')}</div>`:'<div class="empty"><b>No likes yet</b>Tap the heart on any movie.</div>';
     }else{
       const rv=[...D.logs].filter(l=>l.review).sort(cmpDesc);
-      body=rv.length?rv.map(l=>`<div class="rv"><a class="dpost" href="#/${l.item.type}/${l.item.id}">${posterImg(l.item.poster,l.item.title,'w154')}</a><div style="flex:1;min-width:0"><b>${esc(l.item.title)}</b> <small style="color:var(--mut)">${esc(l.item.year)}</small><div class="dmeta" style="margin-top:2px">${l.rating?starsHTML(l.rating):''}<small>${fmtDate(l.date)}</small></div><p>${esc(l.review)}</p></div><button class="ibtn" data-edit="${l.id}" aria-label="Edit">${I.edit}</button></div>`).join(''):'<div class="empty"><b>No reviews yet</b>Write a review on any movie and it will show up here.</div>';
+      body=rv.length?rv.map(l=>`<div class="rv"><a class="dpost" href="#/${l.item.type}/${l.item.id}">${posterImg(l.item.poster,l.item.title,'w154')}</a><div style="flex:1;min-width:0"><b>${esc(l.item.title)}</b> <small style="color:var(--mut)">${esc(l.item.year)}</small><div class="dmeta" style="margin-top:2px">${l.rating?starsHTML(l.rating):''}<small>${fmtDate(l.date)}</small></div>${l.spoiler?`<div class="spw" data-sp><div class="spt">Contains spoilers<small>Tap to read</small></div><p>${esc(l.review)}</p></div>`:`<p>${esc(l.review)}</p>`}</div><button class="ibtn" data-edit="${l.id}" aria-label="Edit">${I.edit}</button></div>`).join(''):'<div class="empty"><b>No reviews yet</b>Write a review on any movie and it will show up here.</div>';
     }
     const LL=isList?D.lists.find(x=>x.id===sub.slice(4)):null;
     el.innerHTML=sub==='films'?`${backBtn}<button class="back mb" data-act="filter" aria-label="Filter">${I.filter}</button>${body}`:`${backBtn}<div class="lh">${isList?esc(LL?LL.name:'List'):ME_T[sub]}</div>${body}`;
