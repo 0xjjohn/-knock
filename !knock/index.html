@@ -68,7 +68,12 @@ svg{width:22px;height:22px;flex:none}
 .pc .seen svg{width:13px;height:13px;stroke-width:3.2}
 .pc.seen .seen{display:none}
 .lc{min-width:0}
-.lstars{height:16px;text-align:center;font-size:10px;margin-top:3px;display:flex;justify-content:center;align-items:center;gap:4px}
+.lstars{min-height:16px;font-size:10px;margin-top:4px;display:flex;justify-content:flex-start;align-items:center;gap:5px;color:var(--mut)}
+.lstars svg{width:12px;height:12px}
+.lstars .stars{font-size:10.5px}
+.lstars .hv{color:#ff8000;display:inline-flex}
+.lstars .hv svg{fill:currentColor}
+.lstars span.ri{display:inline-flex}
 .more{padding:14px;text-align:center;min-height:50px}
 .spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--g);margin:14px auto;animation:sp .8s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -225,7 +230,9 @@ svg{width:22px;height:22px;flex:none}
 @keyframes shim{to{background-position:-200% 0}}
 .lh{padding:calc(14px + var(--top)) 16px 10px 64px;font-size:18.5px;font-weight:700;min-height:calc(58px + var(--top));display:flex;align-items:center}
 /* profile */
-#tab-profile{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+#tab-profile{display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;padding-bottom:0}
+.rc{min-width:0}
+.rc>a.fav{display:block}
 #tab-profile>*{flex:none}
 #tab-profile>.phero{flex:1 1 0;min-height:70px;max-height:200px;height:auto}
 .phero{position:relative;background:#111;overflow:hidden}
@@ -569,7 +576,7 @@ a.opt{color:inherit}
 .fr .fv svg{width:12px;height:12px;flex:none}
 .fsep{height:1px;background:#1a1a1a;flex:none;margin:2px 0}
 .fs{padding:18px 18px 4px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6b6b6b}
-.frs{padding:16px 18px;color:#ff8000;font-size:13px;font-weight:600;text-align:left}
+.frs{padding:16px 18px;color:#ff453a;font-size:13px;font-weight:600;text-align:left}
 .fo{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:44px;padding:0 18px;font-size:13.5px;color:#d4d4d4;text-align:left}
 .fo svg{width:16px;height:16px;color:#fff;flex:none}
 .lgp-h h3 small{font-size:11.5px;color:var(--mut);margin-left:8px;font-weight:500}
@@ -583,6 +590,9 @@ a.opt{color:inherit}
 .ysel{display:flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:15px;background:#1c1c1e;font-size:12px;font-weight:600;color:#ececec;flex:none}
 .ysel svg{width:11px;height:11px}
 .fav>button,button.fav{padding:0}
+.fvg{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}
+.fvh{color:var(--mut);font-size:11.5px;text-align:center;padding:0 16px 24px}
+.fvg .fav.empty{font-size:30px;color:var(--mut)}
 @keyframes ppin{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
 /* v29 */
 .en-r{font-size:11px;line-height:1.55}
@@ -717,10 +727,22 @@ const inWL=k=>D.watchlist.some(i=>i.key===k);
 const liked=k=>D.likes.includes(k);
 function findItem(k){const l=D.logs.find(x=>x.item.key===k);if(l)return l.item;return D.watchlist.find(x=>x.key===k)||D.favs.find(f=>f&&f.key===k)||null;}
 const likedItems=()=>D.likes.map(k=>(D.likeItems&&D.likeItems[k])||findItem(k)).filter(Boolean);
+const metaHTML=m=>(m.rating?starsHTML(m.rating):'')+(m.liked?`<span class="hv">${I.heart}</span>`:'')+(m.rw?`<span class="ri">${I.rew}</span>`:'')+(m.review?`<span class="ri">${I.txt}</span>`:'');
+function filmMeta(key){
+  const L=D.logs.filter(l=>l.item.key===key);
+  return {rating:(L.find(l=>l.rating)||{}).rating||0,liked:liked(key),rw:L.some(l=>l.rewatch&&!l.nd),review:L.some(l=>l.review)};
+}
+function recentActs(){
+  const m=new Map();
+  const add=(item,t)=>{if(!item)return;const o=m.get(item.key);if(!o||o.t<t)m.set(item.key,{item,t});};
+  D.logs.forEach(l=>{if(!l.nd)add(l.item,l.ts||0);});
+  (D.likes||[]).forEach((k,i)=>add((D.likeItems||{})[k],(D.likeTs&&D.likeTs[k])||i));
+  return [...m.values()].sort((a,b)=>b.t-a.t).slice(0,4);
+}
 function setLike(it,on){
-  D.likeItems=D.likeItems||{};
-  if(on){if(!D.likes.includes(it.key))D.likes.push(it.key);D.likeItems[it.key]={key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster};}
-  else{D.likes=D.likes.filter(k=>k!==it.key);delete D.likeItems[it.key];}
+  D.likeItems=D.likeItems||{};D.likeTs=D.likeTs||{};
+  if(on){if(!D.likes.includes(it.key)){D.likes.push(it.key);D.likeTs[it.key]=Date.now();}D.likeItems[it.key]={key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster};}
+  else{D.likes=D.likes.filter(k=>k!==it.key);delete D.likeItems[it.key];delete D.likeTs[it.key];}
 }
 const yearsOf=()=>{const y=new Set([String(new Date().getFullYear())]);D.logs.forEach(l=>{if(!l.nd&&l.date)y.add(l.date.slice(0,4));});return [...y].sort().reverse();};
 const filmsIn=y=>new Set(D.logs.filter(l=>!l.nd&&l.date&&(y==='all'||l.date.slice(0,4)===y)).map(l=>l.item.key)).size;
@@ -738,10 +760,10 @@ function library(yr){
   for(const l of [...D.logs].sort(cmpDesc)){
     if(yr&&yr!=='all'&&(l.nd||String(l.date).slice(0,4)!==yr))continue;
     let e=m.get(l.item.key);
-    if(!e){e={item:l.item,date:l.date,rating:0,count:0,hasD:false,hasND:false,review:false,rew:false};m.set(l.item.key,e);}
+    if(!e){e={item:l.item,date:l.date,rating:0,count:0,hasD:false,hasND:false,review:false,rew:false,rw:false};m.set(l.item.key,e);}
     e.count++;if(!e.rating&&l.rating)e.rating=l.rating;
     if(l.nd)e.hasND=true;else e.hasD=true;
-    if(l.review)e.review=true;if(l.rewatch)e.rew=true;
+    if(l.review)e.review=true;if(l.rewatch){e.rew=true;if(!l.nd)e.rw=true;}
   }
   return [...m.values()].map(e=>{if(e.count>1)e.rew=true;return e;});
 }
@@ -1060,7 +1082,7 @@ function openLog(item,o){
     <div class="lgp-b">
       <div class="lgp-t"><div class="lg-p">${posterImg(item.poster,item.title,'w154')}</div><b>${esc(item.title)}</b></div>
       <div class="lgp-d" id="lg-dr"><span>Date</span><span class="dv"><span id="lg-dt"></span><input type="date" id="lg-d" max="${today()}"><button class="dx" id="lg-dx" aria-label="Reset to today">${I.xx}</button></span></div>
-      <div class="lgp-n" id="lg-nr"><button id="lg-rw" class="${st.rewatch?'on':''}">Rewatch</button>${ex&&!ex.nd?'<button id="lg-again">Log another viewing</button>':''}</div>
+      ${ex&&!ex.nd?'<div class="lgp-n" id="lg-nr"><button id="lg-again">Log another viewing</button></div>':''}
       <div class="lgp-r"><div><div id="lg-pk"></div><small>Rate</small></div><div class="hl"><button id="lg-like" class="${st.like?'on':''}" aria-label="Like">${I.heart}</button><small>Like</small></div></div>
       <textarea id="lg-t" placeholder="Add review…">${esc(ex?ex.review:(ph?ph.review:''))}</textarea>
     </div>
@@ -1069,14 +1091,13 @@ function openLog(item,o){
   const paintD=()=>{di.value=st.date;dt.textContent=fmtLong(st.date);dx.hidden=st.date===today();};
   const paintM=()=>{
     $('#lg-h',w).textContent=nd?'Watched':'I Watched';
-    $('#lg-dr',w).hidden=nd;$('#lg-nr',w).hidden=nd;
+    $('#lg-dr',w).hidden=nd;{const nr=$('#lg-nr',w);if(nr)nr.hidden=nd;}
     $('#lg-seen',w).classList.toggle('on',nd);
   };
   paintD();paintM();
   di.addEventListener('change',()=>{if(di.value){st.date=di.value>today()?today():di.value;paintD();}});
   di.addEventListener('click',()=>{try{di.showPicker&&di.showPicker();}catch(_){}});
   dx.onclick=()=>{st.date=today();paintD();};
-  $('#lg-rw',w).onclick=e=>{st.rewatch=!st.rewatch;e.currentTarget.classList.toggle('on',st.rewatch);};
   $('#lg-pk',w).appendChild(picker(st.rating,n=>{st.rating=n;},40));
   $('#lg-like',w).onclick=e=>{st.like=!st.like;e.currentTarget.classList.toggle('on',st.like);};
   $('#lg-seen',w).onclick=()=>{if(!canToggle)return;nd=!nd;paintM();};
@@ -1649,11 +1670,12 @@ function renderProfile(){
     ['Lists',D.lists.length,'#/me/lists'],
     ['Likes',likedItems().length,'#/me/likes']
   ];
-  const hb=profBd();
+  const hb=profBd(),acts=recentActs();
   el.innerHTML=`<div class="phero">${hb&&hb.bd?`<img src="${IMG}w1280${hb.bd}" alt="">`:''}<i></i></div>
     <button class="pmore" data-p="more" aria-label="More">${I.dots}</button>
     <div class="pav"><button class="pfa" data-p="edit" aria-label="Profile">${D.profile.photo?`<img src="${D.profile.photo}" alt="">`:I.user}</button>${D.profile.name?`<h2 data-p="edit">${esc(D.profile.name)}</h2>`:''}${D.profile.bio?`<div class="pbio" data-p="edit" dir="auto">${esc(D.profile.bio)}</div>`:''}</div>
     <div class="blk"><div class="lab">Favorites</div><div class="favs">${favs}</div></div>
+    ${acts.length?`<div class="blk"><div class="lab">Recent activity</div><div class="favs">${acts.map(a=>`<div class="rc"><a class="fav" href="#/${a.item.type}/${a.item.id}" aria-label="${esc(a.item.title)}">${posterImg(a.item.poster,a.item.title)}</a><div class="lstars">${metaHTML(filmMeta(a.item.key))}</div></div>`).join('')}</div></div>`:''}
     <div class="blk"><div class="lab">Ratings</div><div class="rt2"><span class="gs">★</span><div class="bars">${cnt.map(c=>`<span><i style="height:${c?Math.max(6,c/mx*100):0}%"></i></span>`).join('')}</div><span class="gs">★★★★★</span></div></div>
     <div class="lk">${rows.map(r=>`<a href="${r[2]}"><span>${r[0]}</span><span class="n">${r[1]}${I.fwd}</span></a>`).join('')}</div>`;
   if(hb&&hb.bd===null&&hb.f.bd===undefined)ensureFavBd(hb.f);
@@ -1684,8 +1706,9 @@ $('#tab-profile').addEventListener('click',e=>{
   else if(b.dataset.p==='edit')editProfile();
   else if(b.dataset.p==='more'){
     const signed=Cloud.on&&(Cloud.user||getCached());
-    openPop(b,[{k:'sync',t:'Sync data',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-15.5 6.2L3 16M3 12a9 9 0 0115.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/></svg>'},signed?{k:'out',t:'Sign out',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',red:1}:{k:'in',t:'Sign in',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>'}],k=>{
-      if(k==='sync'){if(Cloud.on&&!signed){setGuest(false);showAuth(true);}else syncNow();}
+    openPop(b,[{k:'fav',t:'Favorite films',ic:I.heart},{k:'sync',t:'Sync data',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-15.5 6.2L3 16M3 12a9 9 0 0115.5-6.2L21 8M21 3v5h-5M3 21v-5h5"/></svg>'},signed?{k:'out',t:'Sign out',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>',red:1}:{k:'in',t:'Sign in',ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>'}],k=>{
+      if(k==='fav')openFavsPage();
+      else if(k==='sync'){if(Cloud.on&&!signed){setGuest(false);showAuth(true);}else syncNow();}
       else if(k==='out')signOutNow();
       else{setGuest(false);showAuth(true);}
     });
@@ -1718,7 +1741,7 @@ function renderMe(el,sub){
       else if(libF.sort==='relo')l=[...l].sort((a,b)=>(a.item.year||'9999').localeCompare(b.item.year||'9999'));
       else if(libF.sort==='name')l=[...l].sort((a,b)=>a.item.title.localeCompare(b.item.title));
       const cy=String(new Date().getFullYear());
-      body=`<div style="height:calc(58px + var(--top))"></div>`+ystrip(libF.year,library().length,filmsIn(libF.year==='all'?cy:libF.year),'films')+(l.length?`<div class="grid">${l.map(x=>`<div class="lc"><a class="pc seen" href="#/${x.item.type}/${x.item.id}" data-key="${x.item.key}">${posterImg(x.item.poster,x.item.title)}</a><div class="lstars">${x.rating?starsHTML(x.rating):''}${liked(x.item.key)?'<span style="color:var(--g)">♥</span>':''}</div></div>`).join('')}</div>`:`<div class="empty"><b>${libF.year==='all'?'Your library is empty':'Nothing in '+libF.year}</b>Anything you log shows up here.</div>`);
+      body=`<div style="height:calc(58px + var(--top))"></div>`+ystrip(libF.year,library().length,filmsIn(libF.year==='all'?cy:libF.year),'films')+(l.length?`<div class="grid">${l.map(x=>`<div class="lc"><a class="pc seen" href="#/${x.item.type}/${x.item.id}" data-key="${x.item.key}">${posterImg(x.item.poster,x.item.title)}</a><div class="lstars">${metaHTML({rating:x.rating,liked:liked(x.item.key),rw:x.rw,review:x.review})}</div></div>`).join('')}</div>`:`<div class="empty"><b>${libF.year==='all'?'Your library is empty':'Nothing in '+libF.year}</b>Anything you log shows up here.</div>`);
     }else if(sub==='watchlist'){
       body=D.watchlist.length?`<div class="grid">${D.watchlist.map(pc).join('')}</div>`:'<div class="empty"><b>Your watchlist is empty</b>Tap the bookmark on any movie to add it here.</div>';
     }else if(sub==='lists'){
@@ -1741,6 +1764,23 @@ function renderMe(el,sub){
   draw();
 }
 
+let favRedraw=null;
+function openFavsPage(){
+  const draw=()=>`<div class="fvg">${D.favs.map((f,i)=>f?`<button class="fav" data-fv="${i}" aria-label="${esc(f.title)}">${posterImg(f.poster,f.title,'w342')}</button>`:`<button class="fav empty" data-fp="${i}" aria-label="Add favorite">+</button>`).join('')}</div><p class="fvh">Tap a film to replace or remove it.</p>`;
+  const w=fullPage('Favorite films',draw());
+  const body=$('.lgp-b',w);
+  favRedraw=()=>{body.innerHTML=draw();};
+  w._onclose=()=>{favRedraw=null;};
+  body.addEventListener('click',e=>{
+    const b=e.target.closest('[data-fv],[data-fp]');if(!b)return;
+    if(b.dataset.fp!==undefined){pickFav(+b.dataset.fp);return;}
+    const i=+b.dataset.fv;
+    openPop(b,[{k:'rep',t:'Replace'},{k:'del',t:'Remove',red:1}],k=>{
+      if(k==='rep')pickFav(i);
+      else{D.favs[i]=null;save();renderProfile();favRedraw&&favRedraw();}
+    });
+  });
+}
 function pickFav(slot){
   const w=openSheet(`<div class="sh-h"><h3>Pick a favorite film</h3></div><div class="chips" style="padding:0 16px 6px"><button class="chip on" data-m="lib">My library</button><button class="chip" data-m="srch">Search</button></div><div class="search" id="fs" hidden>${I.search}<input id="fq" type="search" placeholder="Movie title" autocomplete="off"></div><div id="fres"></div>`,'tall');
   const box=$('#fres',w);let list=[];
@@ -1766,7 +1806,7 @@ function pickFav(slot){
       return;
     }
     const p=e.target.closest('.pc[data-i]');
-    if(p){D.favs[slot]=list[+p.dataset.i];save();closeAll();renderProfile();}
+    if(p){D.favs[slot]=list[+p.dataset.i];save();if(favRedraw)closeTop();else closeAll();renderProfile();if(favRedraw)favRedraw();}
   });
 }
 function readPhoto(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{const m=Math.min(im.width,im.height),S=320,c=document.createElement('canvas');c.width=c.height=S;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);res(c.toDataURL('image/jpeg',.85));};im.src=fr.result;};fr.readAsDataURL(file);});}
@@ -1817,6 +1857,7 @@ function mergeData(L,R){
   o.watchlist=by(R.watchlist,L.watchlist,x=>x.key);
   o.likes=[...new Set([...(R.likes||[]),...(L.likes||[])])];
   o.likeItems=Object.assign({},R.likeItems,L.likeItems);
+  o.likeTs=Object.assign({},R.likeTs,L.likeTs);
   const lm=new Map();
   [...(R.lists||[]),...(L.lists||[])].forEach(l=>{const e=lm.get(l.id);if(!e)lm.set(l.id,Object.assign({},l,{items:[...(l.items||[])]}));else{e.name=l.name||e.name;e.items=by(e.items,l.items,x=>x.key);}});
   o.lists=[...lm.values()];
