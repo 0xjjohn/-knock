@@ -52,7 +52,7 @@ svg{width:22px;height:22px;flex:none}
 .sbar{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;gap:6px;padding:calc(12px + var(--top)) 12px 10px 10px}
 .sbar .ibtn{width:46px;height:46px;color:#e5e7eb;flex:none}
 .sbar .ibtn svg{width:26px;height:26px}
-.sbar input{flex:1;min-width:0;background:none;border:0;outline:0;height:46px;font-size:18.5px;color:#e5e7eb;caret-color:var(--g);-webkit-appearance:none;appearance:none}
+.sbar input{flex:1;min-width:0;background:none;border:0;outline:0;height:46px;font-size:15px;color:#e5e7eb;caret-color:var(--g);-webkit-appearance:none;appearance:none}
 .sbar input::placeholder{color:#8b97a8}
 .sbar input::-webkit-search-cancel-button{display:none}
 .search{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:0 14px;height:48px;color:var(--mut)}
@@ -734,6 +734,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),
 .pgh .ibtn{width:36px;height:36px}
 .pgh .ibtn svg{width:21px;height:21px}
 .sheet.fullpg .nl{padding:12px 16px 10px}
+.lsr{display:inline-flex;align-items:center;gap:8px}
+.lsk{width:20px;height:20px;border-radius:50%;border:1.5px solid #3a3a3a;display:grid;place-items:center;color:#04210f;flex:none}
+.lsk svg{width:12px;height:12px;stroke-width:3.4;opacity:0}
+.lsk.on{background:var(--g);border-color:var(--g)}
+.lsk.on svg{opacity:1}
+.sheet.fullpg .lgp-b.sb .lsb:active{background:#101010}
 </style>
 </head>
 <body>
@@ -1300,20 +1306,20 @@ function shareTitle(it){
   else toast(url);
 }
 function openLists(it){
-  const w=fullPage('Add to lists',`<div class="nl"><input id="nl-i" placeholder="New list name" maxlength="40" autocomplete="off"><button class="chip on" id="nl-b">Create</button></div><div id="ls-b"></div>`);
-  const b=$('#ls-b',w);
+  const nm=(D.profile.name||'').trim();
+  const w=openSheet(`<div class="lgp-h pgh"><button class="ibtn" id="al-x" aria-label="Back">${I.arrow}</button><h3 dir="auto">${nm?esc(nm)+'’s Lists':'Lists'}</h3><button class="ibtn" id="al-s" aria-label="Sort">${I.filter}</button></div><div class="lgp-b sb" id="al-b"></div>`,'fullpg');
+  const b=$('#al-b',w);
+  const strip=L=>{const c=[];for(let i=0;i<5;i++){const x=L.items[i];c.push(x?`<span class="lsc">${posterImg(x.poster,x.title,'w185')}</span>`:'<span class="lsc"></span>');}return `<div class="lss">${c.join('')}</div>`;};
   const draw=()=>{
-    b.innerHTML=D.lists.length?D.lists.map(l=>{const on=l.items.some(i=>i.key===it.key);return `<div class="opt" data-l2="${l.id}"><div class="op-t"><b>${esc(l.name)}</b><small>${l.items.length} ${l.items.length===1?'title':'titles'}</small></div><span class="rad${on?' on':''}">${on?I.check:''}</span></div>`;}).join(''):'<div class="empty"><b>No lists yet</b>Create your first list above.</div>';
+    let ls=[...D.lists];
+    if(listSort==='old')ls.reverse();
+    else if(listSort==='name')ls.sort((a,b)=>a.name.localeCompare(b.name));
+    else if(listSort==='films')ls.sort((a,b)=>b.items.length-a.items.length);
+    b.innerHTML=ls.length?ls.map(L=>{const on=L.items.some(i=>i.key===it.key);return `<div class="lsb" data-l2="${L.id}"><div class="lsh"><b dir="auto">${esc(L.name)}</b><span class="lsr">${listCount(L.items.length)}<i class="lsk${on?' on':''}">${I.check}</i></span></div>${strip(L)}${L.desc?`<p class="lsd" dir="auto">${esc(L.desc)}</p>`:''}</div>`;}).join(''):'<div class="empty"><b>No lists yet</b>Create one from Profile › Lists.</div>';
   };
   draw();
-  const create=()=>{
-    const inp=$('#nl-i',w),name=inp.value.trim();
-    if(!name){inp.focus();return;}
-    D.lists.unshift({id:uid(),name:name.slice(0,40),desc:'',items:[snap(it)],ts:Date.now(),u:Date.now()});
-    inp.value='';save();draw();refreshAll();toast('List created');
-  };
-  $('#nl-b',w).onclick=create;
-  $('#nl-i',w).addEventListener('keydown',e=>{if(e.key==='Enter')create();});
+  $('#al-x',w).onclick=closeTop;
+  $('#al-s',w).onclick=()=>openFilter([{k:'sort',t:'Sort by',top:1,d:'new',o:[['new','Newest'],['old','Oldest'],['name','Name (A–Z)'],['films','Most films']]}],k=>listSort,(k,v)=>{listSort=v;},{done:()=>draw()});
   b.addEventListener('click',e=>{
     const r=e.target.closest('[data-l2]');if(!r)return;
     const l=D.lists.find(x=>x.id===r.dataset.l2);if(!l)return;
