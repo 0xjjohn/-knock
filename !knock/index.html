@@ -640,9 +640,7 @@ button.ios-r:active,div.ios-r.tap:active{background:#2a2a2c}
 #tab-profile>.phero{flex:none;height:auto;min-height:0;max-height:none;aspect-ratio:16/9;width:100%}
 .phero img{opacity:1}
 input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),textarea,.search,.fl input,.sheet textarea{border-radius:0!important}
-.sbar input{background:var(--card2);border:1px solid var(--line);padding:0 12px;height:42px;font-size:13px;color:#e5e7eb}
-.sbar input:focus{border-color:var(--g)}
-.sbar input::placeholder,.search input::placeholder{font-size:13px}
+.search input::placeholder{font-size:13px}
 .search input,#aq,#fq,#fsi{font-size:13px}
 .search{height:44px}
 .fsb{padding:8px 12px 6px}
@@ -735,6 +733,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]),
 .pgh h3{font-size:14.5px}
 .pgh .ibtn{width:36px;height:36px}
 .pgh .ibtn svg{width:21px;height:21px}
+.sheet.fullpg .nl{padding:12px 16px 10px}
 </style>
 </head>
 <body>
@@ -1122,7 +1121,7 @@ async function doSearch(reset){
     if(my!==SS.seq)return;
     SS.page++;SS.total=j.total_pages||1;
     SS.items=SS.items.concat(j.results.filter(r=>r.media_type!==undefined?['movie','tv','person'].includes(r.media_type):true).map(r=>({r,t:r.media_type||type})));
-    box.innerHTML=SS.items.length?resHTML(SS.items)+(SS.page<SS.total?`<button class="btn ghost" data-more="1">Show more</button>`:''):`<div class="empty"><b>No results</b>Try different words or another spelling.</div>`;markSeen(box);
+    box.innerHTML=SS.items.length?SS.items.map(x=>rowHTML(x.r,x.t)).join('')+(SS.page<SS.total?`<button class="btn ghost" data-more="1">Show more</button>`:''):`<div class="empty"><b>No results</b>Try different words or another spelling.</div>`;
   }catch(e){if(my===SS.seq)box.innerHTML=errBox();}
 }
 
@@ -1301,8 +1300,7 @@ function shareTitle(it){
   else toast(url);
 }
 function openLists(it){
-  const w=openSheet(`<div class="sh-h"><h3>Add to lists</h3></div><div class="nl"><input id="nl-i" placeholder="New list name" maxlength="40" autocomplete="off"><button class="chip on" id="nl-b">Create</button></div><div class="sb" id="ls-b"></div><button class="btn" data-done>Done</button>`,'col');
-  $('[data-done]',w).onclick=closeTop;
+  const w=fullPage('Add to lists',`<div class="nl"><input id="nl-i" placeholder="New list name" maxlength="40" autocomplete="off"><button class="chip on" id="nl-b">Create</button></div><div id="ls-b"></div>`);
   const b=$('#ls-b',w);
   const draw=()=>{
     b.innerHTML=D.lists.length?D.lists.map(l=>{const on=l.items.some(i=>i.key===it.key);return `<div class="opt" data-l2="${l.id}"><div class="op-t"><b>${esc(l.name)}</b><small>${l.items.length} ${l.items.length===1?'title':'titles'}</small></div><span class="rad${on?' on':''}">${on?I.check:''}</span></div>`;}).join(''):'<div class="empty"><b>No lists yet</b>Create your first list above.</div>';
