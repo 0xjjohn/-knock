@@ -561,6 +561,7 @@ a.opt{color:inherit}
 .pc.lbk.done .chk{opacity:1}
 .pc.lbk .chk svg{width:40px;height:40px;color:var(--g);stroke-width:1.6}
 .pc.lbk.in{animation:pkin .3s ease-out}
+.pc.lbk.own{opacity:.4}
 .pc.lbk.wide{aspect-ratio:16/9}
 .grid.lbg{gap:6px}
 .lbk .lt{position:absolute;left:0;right:0;bottom:0;padding:12px 5px 3px;font-size:8.5px;line-height:1.2;font-weight:500;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.88));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
@@ -856,7 +857,7 @@ $('#sheets').addEventListener('click',e=>{
 });
 addEventListener('popstate',()=>{
   if(ignorePop){ignorePop--;return;}
-  if(sheets.length){sheets.pop().remove();}
+  if(sheets.length){const w=sheets.pop();if(w._onclose)try{w._onclose();}catch(_){}w.remove();}
 });
 
 /* ================= Router ================= */
@@ -1027,17 +1028,96 @@ const GEN_T=[['all','Any'],['10759','Action & Adventure'],['16','Animation'],['3
 const LANGS=[['all','Any'],['en','English'],['ar','Arabic'],['fr','French'],['es','Spanish'],['hi','Hindi'],['ja','Japanese'],['ko','Korean'],['tr','Turkish'],['it','Italian'],['de','German'],['zh','Chinese'],['ru','Russian']];
 const SORTS={movie:{pop:'popularity.desc',top:'vote_average.desc',new:'primary_release_date.desc',old:'primary_release_date.asc'},tv:{pop:'popularity.desc',top:'vote_average.desc',new:'first_air_date.desc',old:'first_air_date.asc'}};
 const lp={type:'movie',sort:'pop',year:'all',genre:'all',lang:'all',rate:'all'};
+const newNd=(it,rating)=>({id:uid(),item:{key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster},rating:rating||0,date:'',nd:true,review:'',rewatch:false,ts:Date.now()});
+
+/* change poster / backdrop for any title (used outside the title page) */
+async function openArtFor(it){
+  const w=subSheet('Change poster / backdrop',`<div class="chips" id="ar-t"><button class="chip on" data-t="p">Posters</button><button class="chip" data-t="b">Backdrops</button></div><div id="ar-b">${spin}</div><button class="btn ghost" id="ar-r">Reset to default</button>`);
+  let imgs,tab='p';
+  try{imgs=await tmdb(`/${it.type}/${it.id}/images`,{language:'en',include_image_language:'en,null'});}
+  catch(e){$('#ar-b',w).innerHTML=errBox(esc(e.message||''));return;}
+  const lists={p:(imgs.posters||[]).slice(0,30),b:(imgs.backdrops||[]).slice(0,24)};
+  const art=()=>(D.art&&D.art[it.key])||{};
+  const draw=()=>{
+    const cur=art()[tab]||(tab==='p'?it.poster:null),arr=lists[tab];
+    $('#ar-b',w).innerHTML=arr.length?`<div class="grid${tab==='b'?' bd2':''}">${arr.map(x=>`<button class="pc art${tab==='b'?' wide':''}${x.file_path===cur?' sel':''}" data-f="${x.file_path}"><img loading="lazy" src="${IMG}${tab==='p'?'w342':'w500'}${x.file_path}" alt=""><span class="seen">${I.check}</span></button>`).join('')}</div>`:'<div class="empty"><b>No images</b>Nothing else is available for this title.</div>';
+  };
+  w.addEventListener('click',async e=>{
+    const t=e.target.closest('#ar-t [data-t]');
+    if(t){tab=t.dataset.t;$$('#ar-t .chip',w).forEach(c=>c.classList.toggle('on',c===t));draw();return;}
+    const f=e.target.closest('[data-f]');
+    if(f){D.art=D.art||{};D.art[it.key]=Object.assign({},D.art[it.key],{[tab]:f.dataset.f});if(tab==='p'){it.poster=f.dataset.f;setPoster(it.key,it.poster);}else save();draw();return;}
+    if(e.target.closest('#ar-r')){
+      if(D.art)delete D.art[it.key];save();
+      try{const j=await tmdb('/'+it.type+'/'+it.id);it.poster=j.poster_path||null;setPoster(it.key,it.poster);}catch(_){}
+      draw();
+    }
+  });
+  draw();
+}
+
+/* the same actions sheet as a normal title, but "Review or log" never goes to the diary */
+function libActions(it,cb){
+  cb=cb||{};
+  const w=openSheet(`<div class="ac-grab"></div><div class="ac-h"><b>${esc(it.title)}</b><small>${esc(it.year)}</small></div><div class="ac-body"></div>`,'actsheet');
+  w._onclose=()=>{if(cb.close)cb.close();};
+  const body=$('.ac-body',w);
+  const draw=()=>{
+    const k=it.key,wch=watched(k),lk=liked(k),wl=inWL(k),r=(logsOf(k).find(l=>l.rating)||{}).rating||0;
+    body.innerHTML=`<div class="ac-row3">
+      <button class="ac3${wch?' on':''}" data-a="watch">${I.eye}<span>${wch?'Watched':'Watch'}</span></button>
+      <button class="ac3 heart${lk?' on':''}" data-a="like">${I.heart}<span>Like</span></button>
+      <button class="ac3${wl?' on':''}" data-a="wl">${I.clockplus}<span>Watchlist</span></button></div>
+      <div class="ac-rate"><div class="pkm2"></div><small>${r?'Rated '+(r/2):'Rate'}</small></div>
+      <div class="ac-list">
+        <button class="ac-i" data-a="log">${I.plus}<span>Review or log</span></button>
+        <button class="ac-i" data-a="lists">${I.listplus}<span>Add to lists</span></button>
+        <button class="ac-i" data-a="poster">${I.expand}<span>View poster</span></button>
+        <button class="ac-i" data-a="art">${I.brush}<span>Change poster / backdrop</span></button>
+        <button class="ac-i" data-a="share">${I.share}<span>Share</span></button></div>`;
+    $('.pkm2',body).appendChild(picker(r,n=>{
+      const L=logsOf(k),t=L.find(l=>l.nd)||L[0];
+      if(!t){if(!n)return;D.logs.push(newNd(it,n));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
+      else t.rating=n;
+      save();refreshAll();draw();
+    },42));
+  };
+  draw();
+  w.addEventListener('click',e=>{
+    const b=e.target.closest('[data-a]');if(!b)return;
+    const a=b.dataset.a,k=it.key;
+    if(a==='watch'){
+      if(!watched(k)){D.logs.push(newNd(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==k);}
+      else{
+        const risky=logsOf(k).some(l=>!l.nd||l.review||l.rating);
+        if(risky&&!confirm('Remove from watched? All your entries for it will be deleted.'))return;
+        D.logs=D.logs.filter(l=>l.item.key!==k);
+      }
+      save();refreshAll();draw();
+    }
+    else if(a==='like'){setLike(it,!liked(k));save();refreshAll();draw();}
+    else if(a==='wl'){toggleWL(it);draw();}
+    else if(a==='log')openLog(it,{nd:true,rating:(logsOf(k).find(l=>l.rating)||{}).rating||0,after:draw});
+    else if(a==='lists')openLists(it);
+    else if(a==='poster')viewPoster(it.poster,it.title);
+    else if(a==='art')openArtFor(it);
+    else if(a==='share')shareTitle(it);
+  });
+}
+
 function openLibrary(){
-  const owned=new Set(D.logs.map(l=>l.item.key));
-  const seen=new Set(),startTs=Date.now();
-  let items=[],queue=[],page=0,loading=false,added=0,q='',srch=[],moreBusy=false;
+  let owned=new Set(D.logs.map(l=>l.item.key));
+  const addedKeys=new Set();
+  const B={items:[],queue:[],seen:new Set()},Sx={items:[],queue:[],seen:new Set()};
+  let page=0,loading=false,q='',moreBusy=false,seq=0;
+  const V=()=>q?Sx:B;
   const w=openSheet(`<div class="lgp-h fp-h"><button class="ibtn" data-fpb aria-label="Back">${I.arrow}</button><h3>Library<small id="lb-n"></small></h3><button class="ibtn" id="lb-s" aria-label="Search">${I.search}</button><button class="ibtn" id="lb-f" aria-label="Filter">${I.filter}</button></div>
-    <div class="lb-q" hidden><div class="search">${I.search}<input id="lb-i" type="search" placeholder="Search movies & series" autocomplete="off"></div></div>
+    <div class="lb-q" hidden><div class="search">${I.search}<input id="lb-i" type="search" placeholder="Movie, series, actor, director…" autocomplete="off"></div></div>
     <div class="lgp-b lb-b"><div id="lb-g"></div></div>`,'fullpg');
   $('[data-fpb]',w).onclick=closeTop;
   w._onclose=()=>{refreshAll();};
   const G=$('#lb-g',w),inp=$('#lb-i',w),qb=$('.lb-q',w);
-  const cnt=()=>{$('#lb-n',w).textContent=added?added+' added':'';};
+  const cnt=()=>{$('#lb-n',w).textContent=addedKeys.size?addedKeys.size+' added':'';};
   const params=pg=>{
     const t=lp.type,p={sort_by:SORTS[t][lp.sort],page:pg,include_adult:'false','vote_count.gte':lp.sort==='top'?300:50};
     if(lp.sort==='new')p[t==='movie'?'primary_release_date.lte':'first_air_date.lte']=today();
@@ -1047,74 +1127,70 @@ function openLibrary(){
     if(lp.rate!=='all'){p['vote_average.gte']=lp.rate;p['vote_count.gte']=Math.max(p['vote_count.gte'],200);}
     return p;
   };
-  const usable=it=>it&&it.poster&&!owned.has(it.key)&&!seen.has(it.key);
-  const take=()=>{while(queue.length){const it=queue.shift();if(usable(it)){seen.add(it.key);return it;}}return null;};
+  const usable=(it,v)=>it&&it.poster&&!owned.has(it.key)&&!v.seen.has(it.key);
+  const take=v=>{while(v.queue.length){const it=v.queue.shift();if(usable(it,v)){v.seen.add(it.key);return it;}}return null;};
   const more=async()=>{
     if(loading)return;loading=true;
-    try{const j=await tmdb('/discover/'+lp.type,params(++page));(j.results||[]).forEach(r=>queue.push(nrm(r,lp.type)));}catch(e){}
+    try{const j=await tmdb('/discover/'+lp.type,params(++page));(j.results||[]).forEach(r=>B.queue.push(nrm(r,lp.type)));}catch(e){}
     loading=false;
   };
-  const cimg=it=>{const pth=it.bd||it.poster;return pth?`<img loading="lazy" src="${IMG}${it.bd?'w300':'w342'}${pth}" alt="${esc(it.title)}">`:`<div class="noimg">${esc(it.title)}</div>`;};
-  const cell=(it,done)=>`<a class="pc lbk${done?' done':''}" data-k="${it.key}">${posterImg(it.poster,it.title)}<span class="chk">${I.check}</span></a>`;
-  const drawBrowse=()=>{
-    G.innerHTML=items.length?`<div class="grid">${items.map(it=>cell(it)).join('')}</div>`:'<div class="empty"><b>No results</b>Try changing the filters.</div>';
+  const cell=it=>`<a class="pc lbk${owned.has(it.key)?' own':''}" data-k="${it.key}" data-key="${it.key}">${posterImg(it.poster,it.title)}</a>`;
+  const draw=()=>{
+    const v=V();
+    G.innerHTML=v.items.length?`<div class="grid">${v.items.map(cell).join('')}</div>`:`<div class="empty"><b>No results</b>${q?'Try a title, an actor, a director or a writer.':'Try changing the filters.'}</div>`;
   };
   const load=async()=>{
-    items=[];queue=[];page=0;seen.clear();
-    G.innerHTML=spin;
+    B.items=[];B.queue=[];B.seen.clear();page=0;
+    if(!q)G.innerHTML=spin;
     await more();
-    for(let i=0;i<30;i++){let n=take();if(!n&&page<6){await more();n=take();}if(!n)break;items.push(n);}
-    if(!q){drawBrowse();fillCheck();}
-  };
-  const addNd=it=>{
-    D.logs.push({id:uid(),item:{key:it.key,id:it.id,type:it.type,title:it.title,year:it.year,poster:it.poster},rating:0,date:'',nd:true,review:'',rewatch:false,ts:Date.now()});
-    D.watchlist=D.watchlist.filter(x=>x.key!==it.key);
-    owned.add(it.key);added++;cnt();save();
-  };
-  const undo=it=>{
-    D.logs=D.logs.filter(l=>!(l.item.key===it.key&&l.nd&&l.ts>=startTs));
-    if(!D.logs.some(l=>l.item.key===it.key))owned.delete(it.key);
-    added=Math.max(0,added-1);cnt();save();
-  };
-  const pick=async el=>{
-    const it=items.find(x=>x.key===el.dataset.k);if(!it||el.classList.contains('done'))return;
-    el.classList.add('done');addNd(it);
-    const simP=tmdb('/'+it.type+'/'+it.id+'/recommendations').then(j=>(j.results||[]).map(r=>nrm(r,it.type))).catch(()=>[]);
-    await wait(450);
-    const sim=await simP;queue.unshift(...sim.filter(usable));
-    let n=take();if(!n){await more();n=take();}
-    const idx=items.indexOf(it);if(idx<0||q)return;
-    if(n){
-      items[idx]=n;
-      const t=document.createElement('div');t.innerHTML=cell(n);const ne=t.firstChild;ne.classList.add('in');
-      el.replaceWith(ne);
-    }else{items.splice(idx,1);el.remove();}
-    if(queue.length<8)more();
+    for(let i=0;i<30;i++){let n=take(B);if(!n&&page<6){await more();n=take(B);}if(!n)break;B.items.push(n);}
+    if(!q){draw();fillCheck();}
   };
   const showMore=async()=>{
     if(moreBusy||q)return;moreBusy=true;
-    let add=[];for(let i=0;i<12;i++){let n=take();if(!n&&page<40){await more();n=take();}if(!n)break;add.push(n);}
-    items.push(...add);
-    const g=$('.grid',G);if(g)g.insertAdjacentHTML('beforeend',add.map(it=>cell(it)).join(''));
+    const add=[];
+    for(let i=0;i<12;i++){let n=take(B);if(!n&&page<40){await more();n=take(B);}if(!n)break;add.push(n);}
+    B.items.push(...add);
+    const g=$('.grid',G);if(g&&!q)g.insertAdjacentHTML('beforeend',add.map(cell).join(''));
     moreBusy=false;
     if(add.length)fillCheck();
   };
   const fillCheck=()=>{const e=$('.lb-b',w);if(e&&!q&&e.scrollHeight-e.scrollTop-e.clientHeight<700)showMore();};
   $('.lb-b',w).addEventListener('scroll',fillCheck,{passive:true});
+
+  /* search: titles + films of any actor / director / writer matching the text */
+  const CREW=new Set(['Director','Writer','Screenplay','Story','Novel','Creator']);
   const runSearch=debounce(async()=>{
-    q=inp.value.trim();
-    if(!q){drawBrowse();return;}
+    const my=++seq;q=inp.value.trim();
+    if(!q){draw();return;}
     G.innerHTML=spin;
     try{
       const j=await tmdb('/search/multi',{query:q,include_adult:'false'});
-      srch=(j.results||[]).filter(r=>(r.media_type==='movie'||r.media_type==='tv')&&r.poster_path).map(r=>nrm(r));
-      G.innerHTML=srch.length?`<div class="grid">${srch.map(it=>cell(it,owned.has(it.key))).join('')}</div>`:'<div class="empty"><b>No results</b></div>';
-    }catch(e){G.innerHTML=errBox();}
+      if(my!==seq)return;
+      const res=j.results||[];
+      const titles=res.filter(r=>(r.media_type==='movie'||r.media_type==='tv')&&r.poster_path).map(r=>nrm(r));
+      const people=res.filter(r=>r.media_type==='person').slice(0,2);
+      let credits=[];
+      for(const pe of people){
+        try{
+          const c=await tmdb('/person/'+pe.id+'/combined_credits');
+          const rows=[...(c.cast||[]).filter(x=>!/^(self|himself|herself)/i.test(x.character||'')&&!(x.genre_ids||[]).some(g=>g===10767||g===10763||g===10764)),...(c.crew||[]).filter(x=>CREW.has(x.job))];
+          rows.filter(x=>(x.media_type==='movie'||x.media_type==='tv')&&x.poster_path).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0)).slice(0,60).forEach(x=>credits.push(nrm(x)));
+        }catch(_){}
+      }
+      if(my!==seq)return;
+      const personFirst=res[0]&&res[0].media_type==='person';
+      const all=personFirst?[...credits,...titles]:[...titles,...credits];
+      const m=new Map();all.forEach(it=>{if(!m.has(it.key))m.set(it.key,it);});
+      const list=[...m.values()];
+      Sx.items=list.slice(0,30);Sx.queue=list.slice(30);Sx.seen=new Set(Sx.items.map(x=>x.key));
+      draw();
+    }catch(e){if(my===seq)G.innerHTML=errBox();}
   },380);
   inp.addEventListener('input',runSearch);
   $('#lb-s',w).onclick=()=>{
     qb.hidden=!qb.hidden;
-    if(qb.hidden){inp.value='';q='';drawBrowse();}else inp.focus();
+    if(qb.hidden){inp.value='';q='';seq++;draw();}else inp.focus();
   };
   $('#lb-f',w).onclick=()=>{
     const gl=lp.type==='movie'?GEN_M:GEN_T;
@@ -1128,19 +1204,44 @@ function openLibrary(){
       {k:'rate',t:'Rating',d:'all',o:[['all','Any'],['6','6+'],['7','7+'],['8','8+']]}
     ],k=>lp[k],(k,v)=>{lp[k]=v;},{done:()=>{
       const gl2=lp.type==='movie'?GEN_M:GEN_T;if(!gl2.some(([v])=>v===lp.genre))lp.genre='all';
+      q='';inp.value='';qb.hidden=true;seq++;
       load();
     }});
   };
+
+  /* after the actions sheet closes: if the film was added, a related one takes its place */
+  const replaceTile=async(el,it,v,wasSearch)=>{
+    let n=null;
+    const sim=await tmdb('/'+it.type+'/'+it.id+'/recommendations').then(j=>(j.results||[]).map(r=>nrm(r,it.type))).catch(()=>[]);
+    if(wasSearch){
+      n=take(v);
+      if(!n){v.queue.push(...sim);n=take(v);}
+    }else{
+      v.queue.unshift(...sim);
+      n=take(v);if(!n){await more();n=take(v);}
+    }
+    if(!el.isConnected)return;
+    const idx=v.items.indexOf(it);
+    if(n){
+      if(idx>=0)v.items[idx]=n;
+      const t=document.createElement('div');t.innerHTML=cell(n);const ne=t.firstChild;ne.classList.add('in');el.replaceWith(ne);
+    }else{if(idx>=0)v.items.splice(idx,1);el.remove();}
+    if(!wasSearch&&v.queue.length<8)more();
+  };
   G.addEventListener('click',e=>{
     const el=e.target.closest('.lbk');if(!el)return;
-    if(q){
-      const it=srch.find(x=>x.key===el.dataset.k);if(!it)return;
-      if(el.classList.contains('done')){
-        if(D.logs.some(l=>l.item.key===it.key&&l.nd&&l.ts>=startTs)){undo(it);el.classList.remove('done');}
-      }else{addNd(it);el.classList.add('done');}
-      return;
-    }
-    pick(el);
+    const v=V(),wasSearch=!!q;
+    const it=v.items.find(x=>x.key===el.dataset.k);if(!it)return;
+    const had=owned.has(it.key);
+    if(!had){D.logs.push(newNd(it,0));D.watchlist=D.watchlist.filter(x=>x.key!==it.key);save();}
+    libActions(it,{close:()=>{
+      owned=new Set(D.logs.map(l=>l.item.key));
+      const has=owned.has(it.key);
+      if(has&&!had)addedKeys.add(it.key);else if(!has)addedKeys.delete(it.key);
+      cnt();
+      if(has&&!had)replaceTile(el,it,v,wasSearch);
+      else if(el.isConnected)el.classList.toggle('own',has);
+    }});
   });
   load();
 }
@@ -1189,7 +1290,8 @@ function openLog(item,o){
     }
     setLike(item,st.like);
     D.watchlist=D.watchlist.filter(i=>i.key!==item.key);
-    save();closeAll();refreshAll();toast('Saved ✓');
+    save();if(nd)closeTop();else closeAll();refreshAll();toast('Saved ✓');
+    if(o.after)o.after();
   };
 }
 function openEntry(id){
