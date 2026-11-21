@@ -2304,7 +2304,9 @@ function openFavsPage(){
   });
 }
 function pickFav(slot){
-  const w=openSheet(`<div class="sh-h"><h3>Pick a favorite film</h3></div><div class="chips" style="padding:0 16px 6px"><button class="chip on" data-m="lib">My library</button><button class="chip" data-m="srch">Search</button></div><div class="search" id="fs" hidden>${I.search}<input id="fq" type="search" placeholder="Movie title" autocomplete="off"></div><div id="fres"></div>`,'tall');
+  const w=fullPage('Pick a favorite film',`<div class="search" id="fs" hidden>${I.search}<input id="fq" type="search" placeholder="Search for a film" autocomplete="off"></div><div id="fres"></div>`);
+  const hd=$('.lgp-h',w);
+  hd.insertAdjacentHTML('beforeend',`<button class="ibtn" id="fsb" aria-label="Search" style="margin-left:auto">${I.search}</button>`);
   const box=$('#fres',w);let list=[];
   const show=items=>{
     list=items;
@@ -2320,11 +2322,10 @@ function pickFav(slot){
   },380);
   inp.addEventListener('input',go);
   w.addEventListener('click',e=>{
-    const m=e.target.closest('[data-m]');
+    const m=e.target.closest('#fsb');
     if(m){
-      $$('[data-m]',w).forEach(c=>c.classList.toggle('on',c===m));
-      const s=m.dataset.m==='srch';$('#fs',w).hidden=!s;
-      if(s){box.innerHTML='';inp.focus();}else showLib();
+      const fs=$('#fs',w),open=fs.hidden;fs.hidden=!open;
+      if(open){inp.value='';box.innerHTML='';inp.focus();}else{inp.blur();showLib();}
       return;
     }
     const p=e.target.closest('.pc[data-i]');
