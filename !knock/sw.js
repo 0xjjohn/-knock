@@ -1,6 +1,6 @@
 // screennote — Service Worker
 // زوّد رقم VERSION مع كل تعديل عشان الموبايل ينزّل النسخة الجديدة
-const VERSION = 'screennote-v59';
+const VERSION = 'screennote-v60';
 const SHELL = ['./', './index.html', './manifest.json', './firebase-config.js', './icon/icon-192.png', './icon/icon-512.png', './icon/apple-touch-icon.png'];
 const RUNTIME = VERSION + '-rt';
 const MAX_RUNTIME = 400;

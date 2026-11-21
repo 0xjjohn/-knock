@@ -478,7 +478,8 @@ a.opt{color:inherit}
 @keyframes auup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .ver{text-align:center;color:#555;font-size:11px;padding:18px 0 8px}
 .opt[data-s="sync"] small{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.4}
-.frow{display:flex;justify-content:flex-end;padding:2px 12px 8px}
+.frow{display:flex;justify-content:space-between;align-items:center;padding:2px 12px 8px 16px}
+.pcnt{font-size:11px;font-weight:400;letter-spacing:.6px;color:#a9b4c4;text-transform:uppercase}
 .fbtn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#a9b4c4}
 .fbtn svg{width:24px;height:24px;stroke-width:2.2}
 .en-r,.rv p,.dev,#lg-t,.sheet.fullpg .lgp-b textarea{font-family:"Times New Roman",Times,"Liberation Serif",serif}
@@ -1052,7 +1053,14 @@ $('#sheets').addEventListener('click',e=>{
   const a=e.target.closest('a[href^="#/"]');if(!a)return;
   e.preventDefault();
   const h=a.getAttribute('href');
-  if(sheets.length){closeAll();setTimeout(()=>{location.hash=h;},90);}else location.hash=h;
+  if(sheets.length){
+    const rs=sheets.slice().reverse().find(s=>s._reopen);
+    if(rs&&stack.length){
+      const bd=rs.querySelector('.lgp-b'),st=bd?bd.scrollTop:0,fn=rs._reopen;
+      stack[stack.length-1].el._reopen=()=>fn(st);
+    }
+    closeAll();setTimeout(()=>{location.hash=h;},90);
+  }else location.hash=h;
 });
 addEventListener('popstate',()=>{
   if(ignorePop){ignorePop--;return;}
@@ -1065,6 +1073,7 @@ let stack=[],curTab='home';
 function goBack(){if(history.length>1)history.back();else location.hash='#/home';}
 function showTab(t){
   curTab=t;
+  if(t!=='search'&&SS.log)setLogMode(false);
   if(dirtyT[t]){dirtyT[t]=false;renderTabNow(t);}
   $$('.tab').forEach(e=>e.classList.toggle('on',e.id==='tab-'+t));
   $$('#nav [data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===t));
@@ -1077,7 +1086,9 @@ function route(){
   if(TABS.includes(a)){clearStack();showTab(a);return;}
   if((a==='movie'||a==='tv'||a==='person'||a==='me')&&b){
     if(stack.length&&stack[stack.length-1].hash===h)return;
-    if(stack.length>=2&&stack[stack.length-2].hash===h){stack.pop().el.remove();const tp=stack[stack.length-1];if(tp&&tp.el._stale){tp.el._stale=false;if(tp.el._rerender)tp.el._rerender();}return;}
+    if(stack.length>=2&&stack[stack.length-2].hash===h){stack.pop().el.remove();const tp=stack[stack.length-1];if(tp&&tp.el._stale){tp.el._stale=false;if(tp.el._rerender)tp.el._rerender();}
+      if(tp&&tp.el._reopen){const f=tp.el._reopen;tp.el._reopen=null;setTimeout(f,140);}
+      return;}
     const el=document.createElement('div');
     el.className='page';
     $('#overlays').appendChild(el);
@@ -1109,8 +1120,9 @@ $('#nav').innerHTML=
    <button data-go="profile" aria-label="Profile"><span class="ni">${I.user}</span></button>`;
 $('#nav').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.add){openAdd();return;}
+  if(b.dataset.add){enterLogSearch();return;}
   const t=b.dataset.go,h='#/'+t;
+  if(t==='search')setLogMode(false);
   if(location.hash===h||(!location.hash&&t==='home')){$('#tab-'+t).scrollTo({top:0,behavior:'smooth'});showTab(t);}
   else location.hash=h;
 });
@@ -1159,7 +1171,21 @@ const secItems=(j,t)=>j.results.filter(r=>r.media_type!=='person'&&r.poster_path
 
 /* ================= SEARCH ================= */
 const ST=[['multi','All'],['movie','Movies'],['tv','Series'],['person','People']];
-const SS={q:'',type:'multi',page:0,total:1,items:[],seq:0,disc:null};
+const SS={q:'',type:'multi',page:0,total:1,items:[],seq:0,disc:null,log:false};
+function setLogMode(on){
+  SS.log=!!on;
+  const i=$('#sq');
+  if(i)i.placeholder=on?'Search a movie or series to log':'Search';
+  if(!on)return;
+  SS.q='';SS.seq++;SS.items=[];
+  if(i)i.value='';
+  const b=$('#sres');if(b)b.innerHTML='';
+}
+function enterLogSearch(){
+  setLogMode(true);
+  if(location.hash==='#/search'){showTab('search');const i=$('#sq');if(i)i.focus();}
+  else location.hash='#/search';
+}
 function initSearch(){
   const el=$('#tab-search');
   el.innerHTML=`<div class="sbar"><button class="ibtn" id="sback" aria-label="Back">${I.arrow}</button><div class="search sbx">${I.search}<input id="sq" type="search" placeholder="Search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false"></div></div><div id="sres"></div>`;
@@ -1168,7 +1194,15 @@ function initSearch(){
   inp.addEventListener('input',()=>{SS.q=inp.value;go();});
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'){inp.blur();doSearch(true);}});
   $('#sback',el).addEventListener('click',()=>{inp.blur();location.hash='#/home';});
-  $('#sres',el).addEventListener('click',e=>{if(e.target.closest('[data-more]'))doSearch(false);});
+  $('#sres',el).addEventListener('click',e=>{
+    if(e.target.closest('[data-more]')){doSearch(false);return;}
+    if(!SS.log)return;
+    const a=e.target.closest('a[href^="#/movie/"],a[href^="#/tv/"]');if(!a)return;
+    e.preventDefault();
+    const [,t,id]=a.getAttribute('href').split('/');
+    const x=SS.items.find(x=>String(x.r.id)===id&&(x.r.media_type||x.t)===t);
+    if(x){inp.blur();openLog(nrm(x.r,x.r.media_type||x.t));}
+  });
 }
 const deptName=d=>DEPT[d]||d||'';
 function rowHTML(r,t){
@@ -1195,7 +1229,7 @@ async function doSearch(reset){
     const j=await tmdb('/search/'+type,{query:q,page:SS.page+1,include_adult:'false'});
     if(my!==SS.seq)return;
     SS.page++;SS.total=j.total_pages||1;
-    SS.items=SS.items.concat(j.results.filter(r=>r.media_type!==undefined?['movie','tv','person'].includes(r.media_type):true).map(r=>({r,t:r.media_type||type})));
+    SS.items=SS.items.concat(j.results.filter(r=>r.media_type!==undefined?(SS.log?['movie','tv']:['movie','tv','person']).includes(r.media_type):true).map(r=>({r,t:r.media_type||type})));
     box.innerHTML=SS.items.length?SS.items.map(x=>rowHTML(x.r,x.t)).join('')+(SS.page<SS.total?`<button class="btn ghost" data-more="1">Show more</button>`:''):`<div class="empty"><b>No results</b>Try different words or another spelling.</div>`;
   }catch(e){if(my===SS.seq)box.innerHTML=errBox();}
 }
@@ -1660,7 +1694,15 @@ async function renderTitle(el,kind,id){
   };
   const ORDER=[['cast',I.users],['crew',I.clap],['details',I.info],['genre',I.tag],['release',I.cal],['similar',I.layers],['platform',I.tv]];
   function openMenu(){
-    openPop($('[data-act="menu"]',el),ORDER.map(([k])=>({k,t:O[k].t})),k=>O[k].open());
+    openPop($('[data-act="menu"]',el),ORDER.map(([k])=>({k,t:O[k].t})),k=>{
+      O[k].open();
+      const w=sheets[sheets.length-1];
+      if(w)w._reopen=st=>{
+        O[k].open();
+        const nw=sheets[sheets.length-1];
+        if(nw&&st)[120,450,900].forEach(ms=>setTimeout(()=>{const b=nw.querySelector('.lgp-b');if(b)b.scrollTop=st;},ms));
+      };
+    });
   }
 
   /* ---- poster / backdrop override ---- */
@@ -1852,7 +1894,7 @@ async function renderPerson(el,id){
   el.innerHTML=`${backBtn}
     <div class="ph"><div class="hp">${p.profile_path?`<img src="${IMG}w342${p.profile_path}" alt="">`:`<div class="noimg">${esc(p.name)}</div>`}</div><div class="hi"><h1>${esc(p.name)}</h1><div class="ms">${esc(deptName(p.known_for_department))}</div><div class="dr">${esc(info)}</div></div></div>
     ${p.biography?`<p class="bio cl" id="bio">${esc(p.biography)}</p><button class="lnk" id="biom">More</button>`:''}
-    <div class="frow"><button class="fbtn" data-act="pfilter" aria-label="Filter">${I.filter}</button></div>
+    <div class="frow"><span class="pcnt" id="pcnt"></span><button class="fbtn" data-act="pfilter" aria-label="Filter">${I.filter}</button></div>
     <div class="grid" id="pgrid"></div>`;
   const bio=$('#bio',el);
   if(bio){const m=$('#biom',el);m.onclick=()=>{const c=bio.classList.toggle('cl');m.textContent=c?'More':'Less';};if(p.biography.length<260)m.hidden=true;}
@@ -1861,6 +1903,7 @@ async function renderPerson(el,id){
     if(ps.type!=='all')list=list.filter(x=>x.it.type===ps.type);
     list.sort(ps.sort==='new'?(a,b)=>(b.date||'0').localeCompare(a.date||'0'):(a,b)=>b.pop-a.pop);
     $('#pgrid',el).innerHTML=list.length?list.map(x=>pc(x.it)).join(''):'<div class="empty" style="grid-column:1/-1">Nothing here.</div>';
+    $('#pcnt',el).textContent=list.length+' FILMS';
     markSeen(el);
   };
   el.addEventListener('click',e=>{
